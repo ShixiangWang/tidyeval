@@ -3,14 +3,14 @@ knit: "bookdown::render_book"
 title: "Tidy evaluation"
 author: ["Lionel Henry", "Hadley Wickham", "王诗翔（译）"]
 
-description: "The primary goal of this book is to get you up to speed with tidy evaluation and how to write functions around tidyverse pipelines and grammars."
+description: "这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数"
 
 github-repo: tidyverse/tidyeval
 site: bookdown::bookdown_site
 documentclass: book
 ---
 
-# Welcome {-}
+# 欢迎 {-}
 
 The primary goal of this book is to get you up to speed with tidy evaluation by showing you how to write functions using tidyverse pipelines and grammars. The book is written and organised so that you can quickly find the information you need to solve real world problems without having to "get" tidy eval first:
 
