@@ -1,0 +1,15 @@
+
+new_session: yes
+
+rmd_files:
+  [
+    "index.Rmd",
+    "introduction.Rmd",
+    "dotdotdot.Rmd",
+    "modify.Rmd",
+    "glossary.Rmd",
+    "dplyr.Rmd",
+    "ggplot.Rmd",
+    "toolbox.Rmd",
+    "grammar.Rmd",
+  ]

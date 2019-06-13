@@ -1,0 +1,26 @@
+
+# (PART) Going further {-}
+
+```{r setup, include = FALSE}
+source("setup.R")
+```
+
+# A rich toolbox
+
+## TODO `quote()`, `expr()` and `enexpr()`
+
+`case_when()` example?
+
+
+## TODO `quo()` and `enquo()`
+
+
+## TODO `vars()`, `quos()` and `enquos()`
+
+Is it confusing that `vars()` is an alias of `quos()`?
+
+
+## TODO `qq_show()` {#toolbox-qq-show}
+
+
+## TODO `sym()` and `syms()`

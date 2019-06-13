@@ -1,0 +1,1028 @@
+
+# (PART) Principles {-}
+
+```{r setup, include = FALSE}
+source("setup.R")
+library("dplyr")
+```
+
+
+# Introduction
+
+Tidyverse grammars, like dplyr, have a distinctive look and feel. This is in part because they are designed to follow a set of [principles](https://principles.tidyverse.org/). The most important feature of tidyverse grammars is that they let you work with your data as if they were actual objects in your workspace. In a way, the data frame itself becomes a (temporary) workspace.
+
+Data masking makes it easy and natural to read and write data manipulation code, but it has a flip side. It is easier to refer to objects in the mask when you know their names in advance, but it is harder when the names are unknown at the time of writing. In particular, it is harder to make _indirect references_ with column names stored in variables or passed as function arguments.
+
+Tidy evaluation is a set of concepts and tools that make it possible to use tidyverse grammars when columns are specified indirectly. In particular, you will need to learn some tidy eval to extract a tidyverse pipeline in a reusable function.
+
+The first chapter [Why and how](#sec:why-how) provides the motivation for tidy eval, presents the problems that it poses in day-to-day programming, and the general theory and tools for solving those. If you are in a hurry, you can jump straight to [Do you need tidy eval?](#sec:do-you-need). A lot can be done without writing a single line of tidy eval! If you are positive you need it to solve your problem, [Getting up to speed](#sec:up-to-speed) is a self-contained chapter that will teach you the basic workflow of wrapping a tidyverse pipeline in a reusable function. The book ends with a series of recipes and idioms for solving various dplyr and ggplot2 problems.
+
+
+# Why and how {#sec:why-how}
+
+Tidy evaluation is a framework for metaprogramming in R, used throughout the tidyverse to implement data masking. Metaprogramming is about using a programming language to manipulate or modify its own code. This idea is used throughout the tidyverse to change the context of computation of certain pieces of R code.
+
+Changing the context of evaluation is useful for four main purposes:
+
+* To promote data frames to **full blown scopes**, where columns are exposed as named objects.
+
+* To execute your R code in a **foreign environment**. For instance, dbplyr translates ordinary dplyr pipelines to SQL queries.
+
+* To execute your R code with a more performant **compiled language**. For instance, the dplyr package uses C++ implementations for a certain set of mathematical expressions to avoid executing slower R code when possible[^perf].
+
+* To implement **special rules** for ordinary R operators. For instance, selection functions such as `dplyr::select()` or `tidyr::gather()` implement specific behaviours for `c()`, `:` and `-`.
+
+[^perf]: The data.table package uses different metaprogramming tools than tidy eval for the same purpose. Certain expressions are executed in C to perform efficient data transformations.
+
+## Data masking
+
+Of these goals, the promotion of data frames is the most important because data is often the most relevant context for data analysts. We believe that R and the tidyverse are [human-centered](https://principles.tidyverse.org/unifying-principles.html#human-centered) in big part because the data frame is available for direct use in computations, without syntax and boilerplate getting in the way. Formulas for statistical models are a prime example of human-centered syntax in R. Data masking and special operator rules make model formulas an intuitive interface for model specification.
+
+When the contents of the data frame are temporarily promoted as first class objects, we say the data **masks** the workspace:
+
+```{r, eval = FALSE}
+library("dplyr")
+
+starwars %>% filter(
+  height < 200,
+  gender == "male"
+)
+```
+
+Data masking is natural in R because it reduces boilerplate and results in code that maps more directly to how users think about data manipulation problems. Compare to the equivalent subsetting code where it is necessary to be explicit about where the columns come from:
+
+```{r, eval = FALSE}
+starwars[starwars$height < 200 & starwars$gender == "male", ]
+```
+
+Data masking is only possible because R allows suspending the normal flow of evaluation. If code was evaluated in the normal way, R would not be able to find the relevant columns for the computation. For instance, a normal function like `list()`, which has no concept of data masking, will give an error about object not found:
+
+```{r, error = TRUE}
+list(
+  height < 200,
+  gender == "male"
+)
+```
+
+
+## Quoting code
+
+In order to change the context, evaluation must first be suspended before being resumed in a different environment. The technical term for delaying code in this way is **quoting**. Tidyverse grammars quote the code supplied by users as arguments. They don't get results of code but the quoted code itself, whose evaluation can be resumed later on in a data context. In a way, quoted code is like a blueprint for R computations. One important quoting function in dplyr is `vars()`. This function does nothing but return its arguments as blueprints to be interpreted later on by verbs like `summarise_at()`:
+
+```{r}
+starwars %>% summarise_at(vars(ends_with("color")), n_distinct)
+```
+
+If you call `vars()` alone, you get to see the blueprints! [^3]
+
+[^3]: As you can see, these blueprints are also called **quosures**. These are special types of [expressions](#glossary-expr) that keep track of the current context, or [environment](#glossary-env).
+
+```{r}
+vars(
+  ends_with("color"),
+  height:mass
+)
+```
+
+The evaluation of an expression captured as a blueprint can be resumed at any time, possibly in a different context:
+
+```{r, error = TRUE}
+exprs <- vars(height / 100, mass + 50)
+
+rlang::eval_tidy(exprs[[1]])
+
+rlang::eval_tidy(exprs[[1]], data = starwars)
+```
+
+To sum up, the distinctive look and feel of data masking UIs requires suspending the normal evaluation of R code. Once captured as quoted code, it can be resumed in a different context. Unfortunately, the delaying of code makes it harder to program with data masking functions, and requires learning a bit of new theory and some new tools.
+
+
+## Unquoting code
+
+Data masking functions prevent the normal evaluation of their arguments by quoting them. Once in possession of the blueprints of their arguments, a data mask is created and the evaluation is resumed in this new context. Unfortunately, delaying code in this way has a flip side. While it is natural to substitute _values_ when you're programming with normal functions using regular evaluation, it is harder to substitute _column names_ in data masking functions that delay evaluation of your code. To make indirect references to columns, it is necessary to modify the quoted code _before_ it gets evaluated. This is exactly what the `!!` operator, pronounced bang bang, is all about. It is a surgery operator for blueprints of R code.
+
+In the world of normal functions, making indirect references to values is easy. Expressions that yield the same values can be freely interchanged, a property that is sometimes called [referential transparency](https://en.wikipedia.org/wiki/Referential_transparency). The following calls to `my_function()` all yield the same results because they were given the same value as inputs:
+
+```{r}
+my_function <- function(x) x * 100
+
+my_function(6)
+
+my_function(2 * 3)
+
+a <- 2
+b <- 3
+my_function(a * b)
+```
+
+Because data masking functions evaluate their quoted arguments in a different context, they do not have this property:
+
+```{r, error = TRUE}
+starwars %>% summarise(avg = mean(height, na.rm = TRUE))
+
+value <- mean(height, na.rm = TRUE)
+starwars %>% summarise(avg = value)
+```
+
+Storing a column name in a variable or passing one as a function argument requires the tidy eval operator `!!`. This special operator, only available in quoting functions, acts like a surgical operator for modifying blueprints. To understand what it does, it is best to see it in action. The `qq_show()` helper from rlang processes `!!` and prints the resulting blueprint of the computation. As you can observe, `!!` modifies the quoted code by inlining the value of its operand right into the blueprint:
+
+```{r}
+x <- 1
+
+rlang::qq_show(
+  starwars %>% summarise(out = x)
+)
+
+rlang::qq_show(
+  starwars %>% summarise(out = !!x)
+)
+```
+
+What would it take to create an indirect reference to a column name? Inlining the name as a string in the blueprint will not produce what you expect:
+
+```{r}
+col <- "height"
+
+rlang::qq_show(
+  starwars %>% summarise(out = sum(!!col, na.rm = TRUE))
+)
+```
+
+This code amounts to taking the mean of a string, something that R will not be happy about:
+
+```{r, error = TRUE}
+starwars %>% summarise(out = sum("height", na.rm = TRUE))
+```
+
+To refer to column names inside a blueprint, we need to inline blueprint material. We need **symbols**:
+
+```{r}
+sym(col)
+```
+
+Symbols are a special type of string that represent other objects. When a piece of R code is evaluated, every bare variable name is actually a symbol that represents some value, as defined in the current context. Let's see what the modified blueprint looks like when we inline a symbol:
+
+```{r}
+rlang::qq_show(
+  starwars %>% summarise(out = sum(!!sym(col), na.rm = TRUE))
+)
+```
+
+Looks good! We're now ready to actually run the dplyr pipeline with an indirect reference:
+
+```{r}
+starwars %>% summarise(out = sum(!!sym(col), na.rm = TRUE))
+```
+
+There were two necessary steps to create an indirect reference and properly modify the summarising code:
+
+* We first created a piece of blueprint (a symbol) with `sym()`.
+* We used `!!` to insert it in the blueprint captured by `summarise()`.
+
+We call the combination of these two steps the __quote and unquote__ pattern. This pattern is the heart of programming with tidy eval functions. We quote an expression and unquote it in another quoted expression. In other words, we create or capture a piece of blueprint, and insert it in another blueprint just before it's captured by a data masking function. This process is also called __interpolation__.
+
+Most of the time though, we don't need to create blueprints manually. We'll get them by quoting the arguments supplied by users. This gives your functions the same usage and feel as tidyverse verbs.
+
+
+# Do you need tidy eval? {#sec:do-you-need}
+
+In computer science, frameworks like tidy evaluation are known as metaprogramming. Modifying the blueprints of computations amounts to programming the program, i.e. metaprogramming. In other languages, this type of approach is often seen as a last resort because it requires new skills and might make your code harder to read. Things are different in R because of the importance of data masking functions, but it is still good advice to consider other options before turning to tidy evaluation. In this section, we review several strategies for solving programming problems with tidyverse packages.
+
+Before diving into tidy eval, make sure to know about the fundamentals of programming with the tidyverse. These are likely to have a better return on investment of time and will also be useful to solve problems outside the tidyverse.
+
+* [Fixed column names](#sec:fixed-colnames). A solid function taking data frames with fixed column names is better than a brittle function that uses tidy eval.
+
+* [Automating loops](#sec:automating-loops). dplyr excels at automating loops. Acquiring a good command of rowwise vectorisation and columnwise mapping may prove very useful.
+
+Tidy evaluation is not all-or-nothing, it encompasses a wide range of features and techniques. Here are a few techniques that are easy to pick up in your workflow:
+
+* Passing expressions through `{{` and `...`.
+* Passing column names to `.data[[` and `one_of()`.
+
+All these techniques make it possible to reuse existing components of tidyverse grammars and compose them into new functions.
+
+
+## Fixed column names {#sec:fixed-colnames}
+
+A simple solution is to write functions that expect data frames containing specific column names. If the computation always operates on the same columns and nothing varies, you don't need any tidy eval. On the other hand, your users must ensure the existence of these columns as part of their data cleaning process. This is why this technique primarily makes sense when you're writing functions tailored to your own data analysis uses, or perhaps in functions that interface with a specific web API for retrieving data. In general, fixed column names are task specific.
+
+Say we have a simple pipeline that computes the body mass index for each observation in a tibble:
+
+```{r}
+starwars %>% transmute(bmi = mass / (height / 100)^2)
+```
+
+We could extract this code in a function that takes data frames with columns `mass` and `height`:
+
+```{r}
+compute_bmi <- function(data) {
+  data %>% transmute(bmi = mass / height^2)
+}
+```
+
+It's always a good idea to check the inputs of your functions and fail early with an informative error message when their assumptions are not met. In this case, we should validate the data frame and throw an error when it does not contain the expected columns:
+
+```{r, error = TRUE}
+compute_bmi <- function(data) {
+  if (!all(c("mass", "height") %in% names(data))) {
+    stop("`data` must contain `mass` and `height` columns")
+  }
+
+  data %>% transmute(bmi = mass / height^2)
+}
+
+iris %>% compute_bmi()
+```
+
+In fact, we could go even further and validate the contents of the columns in addition to their names:
+
+```{r}
+compute_bmi <- function(data) {
+  if (!all(c("mass", "height") %in% names(data))) {
+    stop("`data` must contain `mass` and `height` columns")
+  }
+
+  mean_height <- round(mean(data$height, na.rm = TRUE), 1)
+  if (mean_height > 3) {
+    warning(glue::glue(
+      "Average height is { mean_height }, is it scaled in meters?"
+    ))
+  }
+
+  data %>% transmute(bmi = mass / height^2)
+}
+
+starwars %>% compute_bmi()
+
+starwars %>% mutate(height = height / 100) %>% compute_bmi()
+```
+
+Spending your programming time on the domain logic of your function, such as input and scale validation, may have a greater payoff than learning tidy eval just to improve its syntax. It makes your function more robust to faulty data and reduces the risks of erroneous analyses.
+
+
+## Automating loops {#sec:automating-loops}
+
+Most programming problems involve __iteration__ because data transformations are typically achieved element by element, by applying the same recipe over and over again. There are two main ways of automating iteration in R, __vectorisation__ and __mapping__. Learning how to juggle with the different ways of expressing loops is not only an important step towards acquiring a good command of R and the tidyverse, it will also make you more proficient at solving programming problems.
+
+
+### Vectorisation in dplyr
+
+dplyr is designed to optimise iteration by taking advantage of the vectorisation of many R functions. Rowwise vectorisation is achieved through normal R rules, which dplyr augments with groupwise vectorisation.
+
+
+#### Rowwise vectorisation
+
+Rowwise vectorisation in dplyr is a consequence of normal R rules for vectorisation. A vectorised function is a function that works the same way with vectors of 1 element as with vectors of _n_ elements. The operation is applied elementwise (often at the machine code level, which makes them very efficient). We have already mentioned the vectorisation of `toupper()`, and many other functions in R are vectorised. One important class of vectorised functions is the arithmetic operators:
+
+```{r}
+# Dividing 1 element
+1 / 10
+
+# Dividing 5 elements
+1:5 / 10
+```
+
+Technically, a function is vectorised when:
+
+* It returns a vector as long as the input.
+* Applying the function on a single element yields the same result than applying it on the whole vector and then subsetting the element.
+
+In other words, a vectorised function `fn` fulfills the following identity:
+
+```{r, eval = FALSE}
+fn(x[[i]]) == fn(x)[[i]]
+```
+
+When you mix vectorised and non-vectorised operations, the combined operation is itself vectorised when the last operation to run is vectorised. Here we'll combine the vectorised `/` function with the summary function `mean()`. The result of this operation is a vector that has the same length as the LHS of `/`:
+
+```{r}
+x <- 1:5
+x / mean(x)
+```
+
+Note that the other combination of operations is not vectorised because in that case the summary operation has the last word:
+
+```{r}
+mean(x / 10)
+```
+
+The dplyr verb `mutate()` expects vector semantics. The operations defining new columns typically return vectors as long as their inputs:
+
+```{r}
+data <- tibble(x = rnorm(5, sd = 10))
+
+data %>%
+  mutate(rescaled = x / sd(x))
+```
+
+In fact, `mutate()` enforces vectorisation. Returning a smaller vector is an error unless it has size 1. If the result of a mutate expression has size 1, it is automatically recycled to the tibble or group size. This ensures that all columns have the same length and fit within the tibble constraints of rectangular data:
+
+```{r}
+data %>%
+  mutate(sigma = sd(x))
+```
+
+In contrast to `mutate()`, the dplyr verb `summarise()` expects summary operations that return a single value:
+
+```{r}
+data %>%
+  summarise(sd(x))
+```
+
+
+#### Groupwise vectorisation
+
+Things get interesting with grouped tibbles. dplyr augments the vectorisation of normal R functions with groupwise vectorisation. If your tibble has `ngroup` groups, the operations are repeated `ngroup` times.
+
+```{r}
+my_division <- function(x, y) {
+  message("I was just called")
+  x / y
+}
+
+# Called 1 time
+data %>%
+  mutate(new = my_division(x, 10))
+
+gdata <- data %>% group_by(g = c("a", "a", "b", "b", "c"))
+
+# Called 3 times
+gdata %>%
+  mutate(new = my_division(x, 10))
+```
+
+If the operation is entirely vectorised, the result will be the same whether the tibble is grouped or not, since elementwise computations are not affected by the values of other elements. But as soon as summary operations are involved, the result depends on the grouping structure because the summaries are computed from group sections instead of whole columns.
+
+```{r}
+# Marginal rescaling
+data %>%
+  mutate(new = x / sd(x))
+
+# Conditional rescaling
+gdata %>%
+  mutate(new = x / sd(x))
+```
+
+Whereas rowwise vectorisation automates loops over the elements of a column, groupwise vectorisation automates loops over the levels of a grouping specification. The combination of these is very powerful.
+
+
+### Looping over columns
+
+Rowwise and groupwise vectorisations are means of looping in the direction of rows, applying the same operation to each group and each element. What if you'd like to apply an operation in the direction of columns? This is possible in dplyr by __mapping__ functions over columns.
+
+Mapping functions is part of the [functional programming](https://adv-r.hadley.nz/fp.html) approach. If you're going to spend some time learning new programming concepts, acquiring functional programming skills is likely to have a higher payoff than learning about the metaprogramming concepts of tidy evaluation. Functional programming is inherent to R as it underlies the `apply()` family of functions in base R and the `map()` family from the [purrr package](https://purrr.tidyverse.org/). It is a powerful tool to add to your quiver.
+
+
+#### Mapping functions
+
+Everything that exists in R is an object, including functions. If you type the name of a function without parentheses, you get the function object instead of the result of calling the function:
+
+```{r}
+toupper
+```
+
+In its simplest form, functional programming is about passing a function object as argument to another function called a __mapper__ function, that iterates over a vector to apply the function on each element, and returns all results in a new vector. In other words, a mapper functions writes loops so you don't have to. Here is a manual loop that applies `toupper()` over all elements of a character vector and returns a new vector:
+
+```{r}
+new <- character(length(letters))
+
+for (i in seq_along(letters)) {
+  new[[i]] <- toupper(letters[[i]])
+}
+
+new
+```
+
+Using a mapper function results in much leaner code. Here we apply `toupper()` over all elements of `letters` and return the results as a character vector, as indicated by the suffix `_chr`:
+
+```{r}
+new <- purrr::map_chr(letters, toupper)
+new
+```
+
+In practice, functional programming is all about hiding `for` loops, which are abstracted away by the mapper functions that automate the iteration.
+
+Mapping is an elegant way of transforming data element by element, but it's not the only one. For instance, `toupper()` is actually a vectorised function that already operates on whole vectors element by element. The fastest and leanest code is just:
+
+```{r}
+toupper(letters)
+```
+
+Mapping functions are more useful with functions that are not vectorised or for computations over lists and data frame columns where the vectorisation occurs within the elements or columns themselves. In the following example, we apply a summarising function over all columns of a data frame:
+
+```{r}
+purrr::map_int(mtcars, n_distinct)
+```
+
+
+#### Scoped dplyr variants
+
+dplyr provides variants of the main data manipulation verbs that map functions over a selection of columns. These verbs are known as the [scoped variants](https://dplyr.tidyverse.org/reference/scoped.html) and are recognizable from their `_at`, `_if` and `_all` suffixes.
+
+Scoped verbs support three sorts of selection:
+
+1. `_all` verbs operate on all columns of the data frame. You can summarise all columns of a data frame within groups with `summarise_all()`:
+
+    ```{r}
+    iris %>% group_by(Species) %>% summarise_all(mean)
+    ```
+
+1. `_if` verbs operate conditionally, on all columns for which a predicate returns `TRUE`. If you are familiar with purrr, the idea is similar to the conditional mapper `purrr::map_if()`. Promoting all character columns of a data frame as grouping variables is as simple as:
+
+    ```{r}
+    starwars %>% group_by_if(is.character)
+    ```
+
+1. `_at` verbs operate on a selection of columns. You can supply integer vectors of column positions or character vectors of colunm names.
+
+    ```{r}
+    mtcars %>% summarise_at(1:2, mean)
+
+    mtcars %>% summarise_at(c("disp", "drat"), median)
+    ```
+
+   More interestingly, you can use `vars()`[^fn:vars] to supply the same sort of expressions you would pass to `select()`! The selection helpers make it very convenient to craft a selection of columns to map over.
+
+    ```{r}
+    starwars %>% summarise_at(vars(height:mass), mean)
+
+    starwars %>% summarise_at(vars(ends_with("_color")), n_distinct)
+    ```
+
+The scoped variants of `mutate()` and `summarise()` are the closest analogue to `base::lapply()` and `purrr::map()`. Unlike pure list mappers, the scoped verbs fully implement the dplyr semantics, such as groupwise vectorisation or the summary constraints:
+
+```{r, include = FALSE}
+# For printing
+mtcars <- as_tibble(mtcars)
+```
+
+```{r}
+# map() returns a simple list with the results
+mtcars[1:5] %>% purrr::map(mean)
+
+# `mutate_` variants recycle to group size
+mtcars[1:5] %>% mutate_all(mean)
+
+# `summarise_` variants enforce a size 1 constraint
+mtcars[1:5] %>% summarise_all(mean)
+
+# All scoped verbs know about groups
+mtcars[1:5] %>% group_by(cyl) %>% summarise_all(mean)
+```
+
+The other scoped variants also accept optional functions to map over the selection of columns. For instance, you could group by a selection of variables and transform them on the fly:
+
+```{r}
+iris %>% group_by_if(is.factor, as.character)
+```
+
+or transform the column names of selected variables:
+
+```{r}
+storms %>% select_at(vars(name:hour), toupper)
+```
+
+The scoped variants lie at the intersection of purrr and dplyr and combine the rowwise looping mechanisms of dplyr with the columnwise mapping of purrr. This is a powerful combination.
+
+[^fn:vars]: `vars()` is the function that does the quoting of your expressions, and returns blueprints to its caller. This pattern of letting an external helper quote the arguments is called [external quoting](#sec:external-quoting).
+
+
+# Getting up to speed {#sec:up-to-speed}
+
+While tidyverse grammars are easy to write in scripts and at the console, they make it a bit harder to reduce code duplication. Writing functions around dplyr pipelines and other tidyeval APIs requires a bit of special knowledge because these APIs use a special type of functions called **quoting functions** in order to make data first class.
+
+If one-off code is often reasonable for common data analysis tasks, it is good practice to write reusable functions to reduce code duplication. In this introduction, you will learn about quoting functions, what challenges they pose for programming, and the solutions that **tidy evaluation** provides to solve those problems.
+
+
+## Writing functions
+
+### Reducing duplication
+
+Writing functions is essential for the clarity and robustness of your code. Functions have several advantages:
+
+1. They prevent inconsistencies because they force multiple computations to follow a single recipe.
+
+1. They emphasise what varies (the arguments) and what is constant (every other component of the computation).
+
+1. They make change easier because you only need to modify one place.
+
+1. They make your code clearer if you give the function and its arguments informative names.
+
+The process for creating a function is straightforward. First, recognise duplication in your code. A good rule of thumb is to create a function when you have copy-pasted a piece of code three times. Can you spot the copy-paste mistake in this duplicated code?
+
+```{r, eval = FALSE}
+(df$a - min(df$a)) / (max(df$a) - min(df$a))
+(df$b - min(df$b)) / (max(df$b) - min(df$b))
+(df$c - min(df$c)) / (max(df$c) - min(df$c))
+(df$d - min(df$d)) / (max(df$d) - min(df$c))
+```
+
+Now identify the varying parts of the expression and give each a name. `x` is an easy choice, but it is often a good idea to reflect the type of argument expected in the name. In our case we expect a numeric vector:
+
+```{r, eval = FALSE}
+(num - min(num)) / (max(num) - min(num))
+(num - min(num)) / (max(num) - min(num))
+(num - min(num)) / (max(num) - min(num))
+(num - min(num)) / (max(num) - min(num))
+```
+
+We can now create a function with a relevant name:
+
+```{r, eval = FALSE}
+rescale01 <- function(num) {
+
+}
+```
+
+Fill it with our deduplicated code:
+
+```{r, eval = FALSE}
+rescale01 <- function(num) {
+  (num - min(num)) / (max(num) - min(num))
+}
+```
+
+And refactor a little to reduce duplication further and handle more cases:
+
+```{r, eval = FALSE}
+rescale01 <- function(num) {
+  rng <- range(num, na.rm = TRUE, finite = TRUE)
+  (num - rng[[1]]) / (rng[[2]] - rng[[1]])
+}
+```
+
+Now you can reuse your function any place you need it:
+
+```{r, eval = FALSE}
+rescale01(df$a)
+rescale01(df$b)
+rescale01(df$c)
+rescale01(df$d)
+```
+
+Reducing code duplication is as much needed with tidyverse grammars as with ordinary computations. Unfortunately, the straightforward process to create functions breaks down with grammars like dplyr, which we attach now.
+
+```{r}
+library("dplyr")
+```
+
+To see the problem, let's use the same function-writing process with a duplicated dplyr pipeline:
+
+```{r, eval = FALSE}
+df1 %>% group_by(x1) %>% summarise(mean = mean(y1))
+df2 %>% group_by(x2) %>% summarise(mean = mean(y2))
+df3 %>% group_by(x3) %>% summarise(mean = mean(y3))
+df4 %>% group_by(x4) %>% summarise(mean = mean(y4))
+```
+
+We first abstract out the varying parts by giving them informative names:
+
+```{r, eval = FALSE}
+data %>% group_by(group_var) %>% summarise(mean = mean(summary_var))
+```
+
+And wrap the pipeline with a function taking these argument names:
+
+```{r}
+grouped_mean <- function(data, group_var, summary_var) {
+  data %>%
+    group_by(group_var) %>%
+    summarise(mean = mean(summary_var))
+}
+```
+
+Unfortunately this function doesn't actually work. When you call it dplyr complains that the variable `group_var` is unknown:
+
+```{r, error = TRUE}
+grouped_mean(mtcars, cyl, mpg)
+```
+
+Here is the proper way of defining this function:
+
+```{r}
+grouped_mean <- function(data, group_var, summary_var) {
+  group_var <- enquo(group_var)
+  summary_var <- enquo(summary_var)
+
+  data %>%
+    group_by(!!group_var) %>%
+    summarise(mean = mean(!!summary_var))
+}
+```
+
+```{r}
+grouped_mean(mtcars, cyl, mpg)
+```
+
+To understand how that works, we need to learn about quoting functions and what special steps are needed to be effective at programming with them. Really we only need two new concepts forming together a single pattern: quoting and unquoting. This introduction will get you up to speed with this pattern.
+
+
+### What's special about quoting functions?
+
+R functions can be categorised in two broad categories: evaluating functions and quoting functions [^1]. These functions differ in the way they get their arguments. Evaluating functions take arguments as **values**. It does not matter what the expression supplied as argument is or which objects it contains. R computes the argument value following the standard rules of evaluation which the function receives passively [^2].
+
+The simplest regular function is `identity()`. It evaluates its single argument and returns the value. Because only the final value of the argument matters, all of these statements are completely equivalent:
+
+```{r}
+identity(6)
+
+identity(2 * 3)
+
+a <- 2
+b <- 3
+identity(a * b)
+```
+
+On the other hand, a quoting function is not passed the value of an expression, it is passed the *expression itself*. We say the argument has been automatically quoted. The quoted expression might be evaluated a bit later or might not be evaluated at all. The simplest quoting function is `quote()`. It automatically quotes its argument and returns the quoted expression without any evaluation.  Because only the expression passed as argument matters, none of these statements are equivalent:
+
+```{r}
+quote(6)
+
+quote(2 * 3)
+
+quote(a * b)
+```
+
+Other familiar quoting operators are `""` and `~`. The `""` operator quotes a piece of text at parsing time and returns a string. This prevents the text from being interpreted as some R code to evaluate. The tilde operator is similar to the `quote()` function in that it prevents R code from being automatically evaluated and returns a quoted expression in the form of a formula. The expression is then used to define a statistical model in modelling functions.  The three following expressions are doing something similar, they are quoting their input:
+
+```{r}
+"a * b"
+
+~ a * b
+
+quote(a * b)
+```
+
+The first statement returns a quoted string and the other two return quoted code in a formula or as a bare expression.
+
+
+[^1]: In practice this is a bit more complex because most quoting functions evaluate at least one argument, usually the data argument.
+
+[^2]: This is why regular functions are said to use standard evaluation unlike quoting functions which use non-standard evaluation (NSE). Note that the function is not entirely passive. Because arguments are lazily evaluated, the function gets to decide when an argument is evaluated, if at all.
+
+
+#### Quoting and evaluating in mundane R code
+
+As an R programmer, you are probably already familiar with the distinction between quoting and evaluating functions. Take the case of subsetting a data frame column by name. The `[[` and `$` operators are both standard for this task but they are used in very different situations. The former supports indirect references like variables or expressions that represent a column name while the latter takes a column name directly:
+
+```{r}
+df <- data.frame(
+  y = 1,
+  var = 2
+)
+
+df$y
+
+var <- "y"
+df[[var]]
+```
+
+Technically, `[[` is an evaluating function while `$` is a quoting function.  You can indirectly refer to columns with `[[` because the subsetting index is evaluated, allowing indirect references. The following expressions are completely equivalent:
+
+```{r}
+df[[var]] # Indirect
+
+df[["y"]] # Direct
+```
+
+But these are not:
+
+```{r}
+df$var    # Direct
+
+df$y      # Direct
+```
+
+The following table summarises the fundamental asymmetry between the two subsetting methods:
+
+|          | Quoted | Evaluated   |
+| -------- |:------:|:-----------:|
+| Direct   | `df$y` | `df[["y"]]` |
+| Indirect | ???    | `df[[var]]` |
+
+
+#### Detecting quoting functions
+
+Because they work so differently to standard R code, it is important to recognise auto-quoted arguments. The documentation of the quoting function should normally tell you if an argument is quoted and evaluated in a special way. You can also detect quoted arguments by yourself with some experimentation. Let's take the following expressions involving a mix of quoting and evaluating functions:
+
+```{r}
+library(MASS)
+
+mtcars2 <- subset(mtcars, cyl == 4)
+
+sum(mtcars2$am)
+
+rm(mtcars2)
+```
+
+A good indication that an argument is auto-quoted and evaluated in a special way is that the argument will not work correctly outside of its original context. Let's try to break down each of these expressions in two steps by storing the arguments in an intermediary variable:
+
+1. `library(MASS)`
+    ```{r, error = TRUE}
+    temp <- MASS
+
+    temp <- "MASS"
+    library(temp)
+    ```
+
+    We get these errors because there is no `MASS` object for R to find, and `temp` is interpreted by `library()` directly as a package name rather than as an indirect reference. Let's try to break down the `subset()` expression:
+
+2. `mtcars2 <- subset(mtcars, cyl == 4)`
+    ```{r, error = TRUE}
+    temp <- cyl == 4
+    ```
+
+    R cannot find `cyl` because we haven't specified where to find it. This object exists only inside the `mtcars` data frame.
+
+3. `sum(mtcars2$am)`
+    ```{r, error = TRUE}
+    temp <- mtcars$am
+    sum(temp)
+    ```
+
+    It worked! `sum()` is an evaluating function and the indirect reference was resolved in the ordinary way.
+
+4. `rm(mtcars2)`
+    ```{r, error = TRUE}
+    mtcars2 <- mtcars
+    temp <- "mtcars2"
+    rm(temp)
+
+    exists("mtcars2")
+    exists("temp")
+    ```
+
+    This time there was no error, but we have accidentally removed the variable `temp` instead of the variable it was referring to. This is because `rm()` auto-quotes its arguments.
+
+
+### Unquotation
+
+In practice, functions that evaluate their arguments are easier to program with because they support both direct and indirect references. For quoting functions, a piece of syntax is missing. We need the ability to **unquote** arguments.
+
+
+#### Unquoting in base R
+
+Base R provides three different ways of allowing direct references:
+
+*   An extra function that evaluates its arguments. For instance the evaluating variant of the `$` operator is `[[`.
+
+
+*   An extra parameter that switches off auto-quoting. For instance `library()` evaluates its first argument if you set `character.only` to `TRUE`:
+
+    ```{r}
+    temp <- "MASS"
+    library(temp, character.only = TRUE)
+    ```
+
+*   An extra parameter that evaluates its argument. If you have a list of object names to pass to `rm()`, use the `list` argument:
+
+    ```{r}
+    temp <- "mtcars2"
+    rm(list = temp)
+
+    exists("mtcars2")
+    ```
+
+There is no general unquoting convention in base R so you have to read the documentation to figure out how to unquote an argument. Many functions like `subset()` or `transform()` do not provide any unquoting option at all.
+
+
+#### Unquoting in the tidyverse!!
+
+All quoting functions in the tidyverse support a single unquotation mechanism, the `!!` operator (pronounced **bang-bang**). You can use `!!` to cancel the automatic quotation and supply indirect references everywhere an argument is automatically quoted. In other words, unquoting lets you open a variable and use what's inside instead.
+
+First let's create a couple of variables that hold references to columns from the `mtcars` data frame. A simple way of creating these references is to use the fundamental quoting function `quote()`:
+
+```{r}
+# Variables referring to columns `cyl` and `mpg`
+x_var <- quote(cyl)
+y_var <- quote(mpg)
+
+x_var
+
+y_var
+```
+
+Here are a few examples of how `!!` can be used in tidyverse functions to unquote these variables, i.e. open them and use their contents.
+
+*   In dplyr most verbs quote their arguments:
+
+    ```{r}
+    library("dplyr")
+
+    by_cyl <- mtcars %>%
+      group_by(!!x_var) %>%            # Open x_var
+      summarise(mean = mean(!!y_var))  # Open y_var
+    ```
+
+*   In ggplot2 `aes()` is the main quoting function:
+
+    ```{r}
+    library("ggplot2")
+
+    ggplot(mtcars, aes(!!x_var, !!y_var)) +  # Open x_var and y_var
+      geom_point()
+    ```
+
+    ggplot2 also features `vars()` which is useful for facetting:
+
+    ```{r}
+    ggplot(mtcars, aes(disp, drat)) +
+      geom_point() +
+      facet_grid(vars(!!x_var))  # Open x_var
+    ```
+
+Being able to make indirect references by opening variables with `!!` is rarely useful in scripts but is invaluable for writing functions. With `!!` we can now easily fix our wrapper function, as we'll see in the following section.
+
+
+### Understanding `!!` with `qq_show()`
+
+At this point it is normal if the concept of unquoting still feels nebulous. A good way of practicing this operation is to see for yourself what it is really doing. To that end  the `qq_show()` function from the rlang package performs unquoting and prints the result to the screen. Here is what `!!` is really doing in the dplyr example (I've broken the pipeline into two steps for readability):
+
+```{r}
+rlang::qq_show(mtcars %>% group_by(!!x_var))
+
+rlang::qq_show(data %>% summarise(mean = mean(!!y_var)))
+```
+
+Similarly for the ggplot2 pipeline:
+
+```{r}
+rlang::qq_show(ggplot(mtcars, aes(!!x_var, !!y_var)))
+
+rlang::qq_show(facet_grid(vars(!!x_var)))
+```
+
+As you can see, unquoting a variable that contains a reference to the column `cyl` is equivalent to directly supplying `cyl` to the dplyr function.
+
+
+## Quote and unquote
+
+The basic process for creating tidyeval functions requires thinking a bit differently but is straightforward: quote and unquote.
+
+1. Use `enquo()` to make a function automatically quote its argument.
+1. Use `!!` to unquote the argument.
+
+Apart from these additional two steps, the process is the same.
+
+
+### The abstraction step
+
+We start as usual by identifying the varying parts of a computation and giving them informative names. These names become the arguments to the function.
+
+```{r, eval = FALSE}
+grouped_mean <- function(data, group_var, summary_var) {
+  data %>%
+    group_by(group_var) %>%
+    summarise(mean = mean(summary_var))
+}
+```
+
+As we have seen earlier this function does not quite work yet so let's fix it by applying the two new steps.
+
+
+### The quoting step
+
+The quoting step is about making our ordinary function a quoting function. Not all parameters should be automatically quoted though. For instance the `data` argument refers to a real data frame that is passed around in the ordinary way. It is crucial to identify which parameters of your function should be automatically quoted: the parameters for which it is allowed to refer to columns in the data frames. In the example, `group_var` and `summary_var` are the parameters that refer to the data.
+
+We know that the fundamental quoting function is `quote()` but how do we go about creating other quoting functions? This is the job of `enquo()`. While `quote()` quotes what *you* typed, `enquo()` quotes what *your user* typed. In other words it makes an argument automatically quote its input. This is exactly how dplyr verbs are created! Here is how to apply `enquo()` to the `group_var` and `summary_var` arguments:
+
+```{r, eval = FALSE}
+group_var <- enquo(group_var)
+summary_var <- enquo(summary_var)
+```
+
+
+### The unquoting step
+
+Finally we identify any place where these variables are passed to other quoting functions. That's where we need to unquote with `!!`. In this case we pass `group_var` to `group_by()` and `summary_var` to `summarise()`:
+
+```{r, eval = FALSE}
+data %>%
+  group_by(!!group_var) %>%
+  summarise(mean = mean(!!summary_var))
+```
+
+
+### Result
+
+The finished function looks like this:
+
+```{r}
+grouped_mean <- function(data, group_var, summary_var) {
+  group_var <- enquo(group_var)
+  summary_var <- enquo(summary_var)
+
+  data %>%
+    group_by(!!group_var) %>%
+    summarise(mean = mean(!!summary_var))
+}
+```
+
+And voilà!
+
+```{r}
+grouped_mean(mtcars, cyl, mpg)
+
+grouped_mean(mtcars, cyl, disp)
+
+grouped_mean(mtcars, am, disp)
+```
+
+This simple quote-and-unquote pattern will get you a long way. It makes it possible to abstract complex combinations of quoting functions into a new quoting function. However this gets us in a sort of loop: quoting functions unquote inside other quoting functions and so on. At the start of the loop is the user typing expressions that are automatically quoted. But what if we can't or don't want to start with expressions typed by the user? What if we'd like to start with a character vector of column names?
+
+
+## Strings instead of quotes
+
+So far we have created a quoting function that wraps around other quoting functions. How can we break this chain of quoting? How can we go from the evaluating world to the quoting universe? The most common way this transition occurs is when you start with a character vector of column names and somehow need to pass the corresponding columns to quoting functions like `dplyr::mutate()`, `dplyr::select()`, or `ggplot2::aes()`. We need a way of bridging evaluating and quoting functions.
+
+First let's see why simply unquoting strings does not work:
+
+```{r, error = TRUE}
+var <- "height"
+mutate(starwars, rescaled = !!var * 100)
+```
+
+We get a type error. Observing the result of unquoting with `qq_show()` will shed some light on this:
+
+```{r}
+rlang::qq_show(mutate(starwars, rescaled = !!var * 100))
+```
+
+We have unquoted a string, and now dplyr tried to multiply that string by 100!
+
+
+### Strings
+
+There is a fundamental difference between these two objects:
+
+```{r}
+"height"
+
+quote(height)
+```
+
+`"height"` is a string and `quote(height)` is a **symbol**, or variable name. A symbol is much more than a string, it is a reference to an R object. That's why you have to use symbols to refer to data frame columns. Fortunately transforming strings to symbols is straightforward with the tidy eval `sym()` function:
+
+```{r}
+sym("height")
+```
+
+If you use `sym()` instead of `enquo()`, you end up with an evaluating function that transforms its inputs into symbols that can suitably be unquoted:
+
+```{r}
+grouped_mean2 <- function(data, group_var, summary_var) {
+  group_var <- sym(group_var)
+  summary_var <- sym(summary_var)
+
+  data %>%
+    group_by(!!group_var) %>%
+    summarise(mean = mean(!!summary_var))
+}
+```
+
+With this simple change we now have an *evaluating* wrapper which can be used in the same way as `[[`. You can call `grouped_mean2()` with direct references:
+
+```{r}
+grouped_mean2(starwars, "gender", "mass")
+```
+
+Or indirect references:
+
+```{r}
+grp_var <- "gender"
+sum_var <- "mass"
+grouped_mean2(starwars, grp_var, sum_var)
+```
+
+
+### Character vectors of column names
+
+What if you have a whole character vector of column names? You can transform vectors to a list of symbols with the plural variant `syms()`:
+
+```{r}
+cols <- syms(c("species", "gender"))
+
+cols
+```
+
+But now we have a list. Can we just unquote a list of symbols with `!!`?
+
+```{r, error = TRUE}
+group_by(starwars, !!cols)
+```
+
+Something's wrong. Using `qq_show()`, we see that `group_by()` gets a list instead of the individual symbols:
+
+```{r}
+rlang::qq_show(group_by(starwars, !!cols))
+```
+
+We should unquote each symbol in the list as a separate argument. The big bang operator `!!!` makes this easy:
+
+```{r}
+rlang::qq_show(group_by(starwars, !!cols[[1]], !!cols[[2]]))
+
+rlang::qq_show(group_by(starwars, !!!cols))
+```
+
+Working with multiple arguments and lists of expressions requires specific techniques such as using `!!!`. These techniques are covered in the next chapter.
