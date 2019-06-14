@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>3 Do you need tidy eval? | Tidy evaluation</title>
+  <meta name="description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数" />
+  <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="3 Do you need tidy eval? | Tidy evaluation" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数" />
+  <meta name="github-repo" content="tidyverse/tidyeval" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="3 Do you need tidy eval? | Tidy evaluation" />
+  
+  <meta name="twitter:description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数" />
+  
+
+<meta name="author" content="Lionel Henry" />
+<meta name="author" content="Hadley Wickham" />
+<meta name="author" content="王诗翔（译）" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="sec-why-how.html">
+<link rel="next" href="sec-up-to-speed.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-115082821-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-115082821-1');
+</script>
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="adv-r.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><strong><a href="./">Tidy evaluation</a></strong></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>欢迎</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#other-resources"><i class="fa fa-check"></i>Other resources</a></li>
+</ul></li>
+<li class="part"><span><b>I Principles</b></span></li>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="sec-why-how.html"><a href="sec-why-how.html"><i class="fa fa-check"></i><b>2</b> Why and how</a><ul>
+<li class="chapter" data-level="2.1" data-path="sec-why-how.html"><a href="sec-why-how.html#data-masking"><i class="fa fa-check"></i><b>2.1</b> Data masking</a></li>
+<li class="chapter" data-level="2.2" data-path="sec-why-how.html"><a href="sec-why-how.html#quoting-code"><i class="fa fa-check"></i><b>2.2</b> Quoting code</a></li>
+<li class="chapter" data-level="2.3" data-path="sec-why-how.html"><a href="sec-why-how.html#unquoting-code"><i class="fa fa-check"></i><b>2.3</b> Unquoting code</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html"><i class="fa fa-check"></i><b>3</b> Do you need tidy eval?</a><ul>
+<li class="chapter" data-level="3.1" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#sec:fixed-colnames"><i class="fa fa-check"></i><b>3.1</b> Fixed column names</a></li>
+<li class="chapter" data-level="3.2" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#sec:automating-loops"><i class="fa fa-check"></i><b>3.2</b> Automating loops</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#vectorisation-in-dplyr"><i class="fa fa-check"></i><b>3.2.1</b> Vectorisation in dplyr</a></li>
+<li class="chapter" data-level="3.2.2" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#looping-over-columns"><i class="fa fa-check"></i><b>3.2.2</b> Looping over columns</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html"><i class="fa fa-check"></i><b>4</b> Getting up to speed</a><ul>
+<li class="chapter" data-level="4.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#writing-functions"><i class="fa fa-check"></i><b>4.1</b> Writing functions</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#reducing-duplication"><i class="fa fa-check"></i><b>4.1.1</b> Reducing duplication</a></li>
+<li class="chapter" data-level="4.1.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#whats-special-about-quoting-functions"><i class="fa fa-check"></i><b>4.1.2</b> What’s special about quoting functions?</a></li>
+<li class="chapter" data-level="4.1.3" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#unquotation"><i class="fa fa-check"></i><b>4.1.3</b> Unquotation</a></li>
+<li class="chapter" data-level="4.1.4" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#understanding-with-qq_show"><i class="fa fa-check"></i><b>4.1.4</b> Understanding <code>!!</code> with <code>qq_show()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#quote-and-unquote"><i class="fa fa-check"></i><b>4.2</b> Quote and unquote</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#the-abstraction-step"><i class="fa fa-check"></i><b>4.2.1</b> The abstraction step</a></li>
+<li class="chapter" data-level="4.2.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#the-quoting-step"><i class="fa fa-check"></i><b>4.2.2</b> The quoting step</a></li>
+<li class="chapter" data-level="4.2.3" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#the-unquoting-step"><i class="fa fa-check"></i><b>4.2.3</b> The unquoting step</a></li>
+<li class="chapter" data-level="4.2.4" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#result"><i class="fa fa-check"></i><b>4.2.4</b> Result</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#strings-instead-of-quotes"><i class="fa fa-check"></i><b>4.3</b> Strings instead of quotes</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#strings"><i class="fa fa-check"></i><b>4.3.1</b> Strings</a></li>
+<li class="chapter" data-level="4.3.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#character-vectors-of-column-names"><i class="fa fa-check"></i><b>4.3.2</b> Character vectors of column names</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="multiple.html"><a href="multiple.html"><i class="fa fa-check"></i><b>5</b> Dealing with multiple arguments</a><ul>
+<li class="chapter" data-level="5.1" data-path="multiple.html"><a href="multiple.html#the-...-argument"><i class="fa fa-check"></i><b>5.1</b> The <code>...</code> argument</a></li>
+<li class="chapter" data-level="5.2" data-path="multiple.html"><a href="multiple.html#simple-forwarding-of-..."><i class="fa fa-check"></i><b>5.2</b> Simple forwarding of <code>...</code></a></li>
+<li class="chapter" data-level="5.3" data-path="multiple.html"><a href="multiple.html#quote-multiple-arguments"><i class="fa fa-check"></i><b>5.3</b> Quote multiple arguments</a></li>
+<li class="chapter" data-level="5.4" data-path="multiple.html"><a href="multiple.html#unquote-multiple-arguments"><i class="fa fa-check"></i><b>5.4</b> Unquote multiple arguments</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="modifying-inputs.html"><a href="modifying-inputs.html"><i class="fa fa-check"></i><b>6</b> Modifying inputs</a><ul>
+<li class="chapter" data-level="6.1" data-path="modifying-inputs.html"><a href="modifying-inputs.html#modifying-names"><i class="fa fa-check"></i><b>6.1</b> Modifying names</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="modifying-inputs.html"><a href="modifying-inputs.html#default-argument-names"><i class="fa fa-check"></i><b>6.1.1</b> Default argument names</a></li>
+<li class="chapter" data-level="6.1.2" data-path="modifying-inputs.html"><a href="modifying-inputs.html#unquoting-argument-names"><i class="fa fa-check"></i><b>6.1.2</b> Unquoting argument names</a></li>
+<li class="chapter" data-level="6.1.3" data-path="modifying-inputs.html"><a href="modifying-inputs.html#prefixing-quoted-arguments"><i class="fa fa-check"></i><b>6.1.3</b> Prefixing quoted arguments</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="modifying-inputs.html"><a href="modifying-inputs.html#modifying-quoted-expressions"><i class="fa fa-check"></i><b>6.2</b> Modifying quoted expressions</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="modifying-inputs.html"><a href="modifying-inputs.html#expanding-quoted-expressions-with-expr"><i class="fa fa-check"></i><b>6.2.1</b> Expanding quoted expressions with <code>expr()</code></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>7</b> Glossary</a><ul>
+<li class="chapter" data-level="7.1" data-path="glossary.html"><a href="glossary.html#data-structures"><i class="fa fa-check"></i><b>7.1</b> Data structures</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="glossary.html"><a href="glossary.html#glossary-data-mask"><i class="fa fa-check"></i><b>7.1.1</b> TODO Data mask</a></li>
+<li class="chapter" data-level="7.1.2" data-path="glossary.html"><a href="glossary.html#glossary-expr"><i class="fa fa-check"></i><b>7.1.2</b> Expression</a></li>
+<li class="chapter" data-level="7.1.3" data-path="glossary.html"><a href="glossary.html#expression-base"><i class="fa fa-check"></i><b>7.1.3</b> Expression (base)</a></li>
+<li class="chapter" data-level="7.1.4" data-path="glossary.html"><a href="glossary.html#glossary-sym"><i class="fa fa-check"></i><b>7.1.4</b> TODO Symbol</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="glossary.html"><a href="glossary.html#programming-concepts"><i class="fa fa-check"></i><b>7.2</b> Programming Concepts</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="glossary.html"><a href="glossary.html#glossary-constant-symbolic"><i class="fa fa-check"></i><b>7.2.1</b> Constant versus symbolic</a></li>
+<li class="chapter" data-level="7.2.2" data-path="glossary.html"><a href="glossary.html#glossary-nse"><i class="fa fa-check"></i><b>7.2.2</b> TODO Non-Standard Evaluation (NSE)</a></li>
+<li class="chapter" data-level="7.2.3" data-path="glossary.html"><a href="glossary.html#glossary-quotation-evaluation"><i class="fa fa-check"></i><b>7.2.3</b> TODO Quotation versus Evaluation</a></li>
+<li class="chapter" data-level="7.2.4" data-path="glossary.html"><a href="glossary.html#glossary-qq"><i class="fa fa-check"></i><b>7.2.4</b> TODO Quasiquotation</a></li>
+<li class="chapter" data-level="7.2.5" data-path="glossary.html"><a href="glossary.html#glossary-parse"><i class="fa fa-check"></i><b>7.2.5</b> TODO Parsing</a></li>
+<li class="chapter" data-level="7.2.6" data-path="glossary.html"><a href="glossary.html#glossary-metaprogramming"><i class="fa fa-check"></i><b>7.2.6</b> TODO Metaprogramming</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>II Cookbooks</b></span></li>
+<li class="chapter" data-level="8" data-path="dplyr.html"><a href="dplyr.html"><i class="fa fa-check"></i><b>8</b> dplyr</a><ul>
+<li class="chapter" data-level="8.1" data-path="dplyr.html"><a href="dplyr.html#patterns-for-single-arguments"><i class="fa fa-check"></i><b>8.1</b> Patterns for single arguments</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="dplyr.html"><a href="dplyr.html#enquo-and---quote-and-unquote-arguments"><i class="fa fa-check"></i><b>8.1.1</b> <code>enquo()</code> and <code>!!</code> - Quote and unquote arguments</a></li>
+<li class="chapter" data-level="8.1.2" data-path="dplyr.html"><a href="dplyr.html#quo_name---create-default-column-names"><i class="fa fa-check"></i><b>8.1.2</b> <code>quo_name()</code> - Create default column names</a></li>
+<li class="chapter" data-level="8.1.3" data-path="dplyr.html"><a href="dplyr.html#and---unquote-column-names"><i class="fa fa-check"></i><b>8.1.3</b> <code>:=</code> and <code>!!</code> - Unquote column names</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="dplyr.html"><a href="dplyr.html#patterns-for-multiple-arguments"><i class="fa fa-check"></i><b>8.2</b> Patterns for multiple arguments</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="dplyr.html"><a href="dplyr.html#forward-multiple-arguments"><i class="fa fa-check"></i><b>8.2.1</b> <code>...</code> - Forward multiple arguments</a></li>
+<li class="chapter" data-level="8.2.2" data-path="dplyr.html"><a href="dplyr.html#enquos-and---quote-and-unquote-multiple-arguments"><i class="fa fa-check"></i><b>8.2.2</b> <code>enquos()</code> and <code>!!!</code> - Quote and unquote multiple arguments</a></li>
+<li class="chapter" data-level="8.2.3" data-path="dplyr.html"><a href="dplyr.html#expr---modify-quoted-arguments"><i class="fa fa-check"></i><b>8.2.3</b> <code>expr()</code> - Modify quoted arguments</a></li>
+<li class="chapter" data-level="8.2.4" data-path="dplyr.html"><a href="dplyr.html#sec:external-quoting"><i class="fa fa-check"></i><b>8.2.4</b> <code>vars()</code> - Quote multiple arguments externally</a></li>
+<li class="chapter" data-level="8.2.5" data-path="dplyr.html"><a href="dplyr.html#enquos.named-true---automatically-add-default-names"><i class="fa fa-check"></i><b>8.2.5</b> <code>enquos(.named = TRUE)</code> - Automatically add default names</a></li>
+<li class="chapter" data-level="8.2.6" data-path="dplyr.html"><a href="dplyr.html#quos_auto_name---manually-add-default-names"><i class="fa fa-check"></i><b>8.2.6</b> <code>quos_auto_name()</code> - Manually add default names</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="dplyr.html"><a href="dplyr.html#select"><i class="fa fa-check"></i><b>8.3</b> <code>select()</code></a></li>
+<li class="chapter" data-level="8.4" data-path="dplyr.html"><a href="dplyr.html#filter"><i class="fa fa-check"></i><b>8.4</b> <code>filter()</code></a></li>
+<li class="chapter" data-level="8.5" data-path="dplyr.html"><a href="dplyr.html#case_when"><i class="fa fa-check"></i><b>8.5</b> <code>case_when()</code></a></li>
+<li class="chapter" data-level="8.6" data-path="dplyr.html"><a href="dplyr.html#gotchas"><i class="fa fa-check"></i><b>8.6</b> Gotchas</a><ul>
+<li class="chapter" data-level="8.6.1" data-path="dplyr.html"><a href="dplyr.html#nested-quoting-functions"><i class="fa fa-check"></i><b>8.6.1</b> Nested quoting functions</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="ggplot2.html"><a href="ggplot2.html"><i class="fa fa-check"></i><b>9</b> ggplot2</a></li>
+<li class="part"><span><b>III Going further</b></span></li>
+<li class="chapter" data-level="10" data-path="a-rich-toolbox.html"><a href="a-rich-toolbox.html"><i class="fa fa-check"></i><b>10</b> A rich toolbox</a><ul>
+<li class="chapter" data-level="10.1" data-path="a-rich-toolbox.html"><a href="a-rich-toolbox.html#todo-quote-expr-and-enexpr"><i class="fa fa-check"></i><b>10.1</b> TODO <code>quote()</code>, <code>expr()</code> and <code>enexpr()</code></a></li>
+<li class="chapter" data-level="10.2" data-path="a-rich-toolbox.html"><a href="a-rich-toolbox.html#todo-quo-and-enquo"><i class="fa fa-check"></i><b>10.2</b> TODO <code>quo()</code> and <code>enquo()</code></a></li>
+<li class="chapter" data-level="10.3" data-path="a-rich-toolbox.html"><a href="a-rich-toolbox.html#todo-vars-quos-and-enquos"><i class="fa fa-check"></i><b>10.3</b> TODO <code>vars()</code>, <code>quos()</code> and <code>enquos()</code></a></li>
+<li class="chapter" data-level="10.4" data-path="a-rich-toolbox.html"><a href="a-rich-toolbox.html#toolbox-qq-show"><i class="fa fa-check"></i><b>10.4</b> TODO <code>qq_show()</code></a></li>
+<li class="chapter" data-level="10.5" data-path="a-rich-toolbox.html"><a href="a-rich-toolbox.html#todo-sym-and-syms"><i class="fa fa-check"></i><b>10.5</b> TODO <code>sym()</code> and <code>syms()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="creating-grammars.html"><a href="creating-grammars.html"><i class="fa fa-check"></i><b>11</b> Creating grammars</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Tidy evaluation</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="sec:do-you-need" class="section level1">
+<h1><span class="header-section-number">3</span> Do you need tidy eval?</h1>
+<p>In computer science, frameworks like tidy evaluation are known as metaprogramming. Modifying the blueprints of computations amounts to programming the program, i.e. metaprogramming. In other languages, this type of approach is often seen as a last resort because it requires new skills and might make your code harder to read. Things are different in R because of the importance of data masking functions, but it is still good advice to consider other options before turning to tidy evaluation. In this section, we review several strategies for solving programming problems with tidyverse packages.</p>
+<p>Before diving into tidy eval, make sure to know about the fundamentals of programming with the tidyverse. These are likely to have a better return on investment of time and will also be useful to solve problems outside the tidyverse.</p>
+<ul>
+<li><p><a href="sec-do-you-need.html#sec:fixed-colnames">Fixed column names</a>. A solid function taking data frames with fixed column names is better than a brittle function that uses tidy eval.</p></li>
+<li><p><a href="sec-do-you-need.html#sec:automating-loops">Automating loops</a>. dplyr excels at automating loops. Acquiring a good command of rowwise vectorisation and columnwise mapping may prove very useful.</p></li>
+</ul>
+<p>Tidy evaluation is not all-or-nothing, it encompasses a wide range of features and techniques. Here are a few techniques that are easy to pick up in your workflow:</p>
+<ul>
+<li>Passing expressions through <code>{{</code> and <code>...</code>.</li>
+<li>Passing column names to <code>.data[[</code> and <code>one_of()</code>.</li>
+</ul>
+<p>All these techniques make it possible to reuse existing components of tidyverse grammars and compose them into new functions.</p>
+<div id="sec:fixed-colnames" class="section level2">
+<h2><span class="header-section-number">3.1</span> Fixed column names</h2>
+<p>A simple solution is to write functions that expect data frames containing specific column names. If the computation always operates on the same columns and nothing varies, you don’t need any tidy eval. On the other hand, your users must ensure the existence of these columns as part of their data cleaning process. This is why this technique primarily makes sense when you’re writing functions tailored to your own data analysis uses, or perhaps in functions that interface with a specific web API for retrieving data. In general, fixed column names are task specific.</p>
+<p>Say we have a simple pipeline that computes the body mass index for each observation in a tibble:</p>
+<pre class="sourceCode r"><code class="sourceCode r">starwars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">transmute</span>(<span class="dt">bmi =</span> mass <span class="op">/</span><span class="st"> </span>(height <span class="op">/</span><span class="st"> </span><span class="dv">100</span>)<span class="op">^</span><span class="dv">2</span>)
+<span class="co">#&gt; # A tibble: 87 x 1</span>
+<span class="co">#&gt;     bmi</span>
+<span class="co">#&gt;   &lt;dbl&gt;</span>
+<span class="co">#&gt; 1  26.0</span>
+<span class="co">#&gt; 2  26.9</span>
+<span class="co">#&gt; 3  34.7</span>
+<span class="co">#&gt; 4  33.3</span>
+<span class="co">#&gt; 5  21.8</span>
+<span class="co">#&gt; # … with 82 more rows</span></code></pre>
+<p>We could extract this code in a function that takes data frames with columns <code>mass</code> and <code>height</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r">compute_bmi &lt;-<span class="st"> </span><span class="cf">function</span>(data) {
+  data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">transmute</span>(<span class="dt">bmi =</span> mass <span class="op">/</span><span class="st"> </span>height<span class="op">^</span><span class="dv">2</span>)
+}</code></pre>
+<p>It’s always a good idea to check the inputs of your functions and fail early with an informative error message when their assumptions are not met. In this case, we should validate the data frame and throw an error when it does not contain the expected columns:</p>
+<pre class="sourceCode r"><code class="sourceCode r">compute_bmi &lt;-<span class="st"> </span><span class="cf">function</span>(data) {
+  <span class="cf">if</span> (<span class="op">!</span><span class="kw">all</span>(<span class="kw">c</span>(<span class="st">&quot;mass&quot;</span>, <span class="st">&quot;height&quot;</span>) <span class="op">%in%</span><span class="st"> </span><span class="kw">names</span>(data))) {
+    <span class="kw">stop</span>(<span class="st">&quot;`data` must contain `mass` and `height` columns&quot;</span>)
+  }
+
+  data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">transmute</span>(<span class="dt">bmi =</span> mass <span class="op">/</span><span class="st"> </span>height<span class="op">^</span><span class="dv">2</span>)
+}
+
+iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">compute_bmi</span>()
+<span class="co">#&gt; Error in compute_bmi(.): `data` must contain `mass` and `height` columns</span></code></pre>
+<p>In fact, we could go even further and validate the contents of the columns in addition to their names:</p>
+<pre class="sourceCode r"><code class="sourceCode r">compute_bmi &lt;-<span class="st"> </span><span class="cf">function</span>(data) {
+  <span class="cf">if</span> (<span class="op">!</span><span class="kw">all</span>(<span class="kw">c</span>(<span class="st">&quot;mass&quot;</span>, <span class="st">&quot;height&quot;</span>) <span class="op">%in%</span><span class="st"> </span><span class="kw">names</span>(data))) {
+    <span class="kw">stop</span>(<span class="st">&quot;`data` must contain `mass` and `height` columns&quot;</span>)
+  }
+
+  mean_height &lt;-<span class="st"> </span><span class="kw">round</span>(<span class="kw">mean</span>(data<span class="op">$</span>height, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>), <span class="dv">1</span>)
+  <span class="cf">if</span> (mean_height <span class="op">&gt;</span><span class="st"> </span><span class="dv">3</span>) {
+    <span class="kw">warning</span>(glue<span class="op">::</span><span class="kw">glue</span>(
+      <span class="st">&quot;Average height is { mean_height }, is it scaled in meters?&quot;</span>
+    ))
+  }
+
+  data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">transmute</span>(<span class="dt">bmi =</span> mass <span class="op">/</span><span class="st"> </span>height<span class="op">^</span><span class="dv">2</span>)
+}
+
+starwars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">compute_bmi</span>()
+<span class="co">#&gt; Warning in compute_bmi(.): Average height is 174.4, is it scaled in meters?</span>
+<span class="co">#&gt; # A tibble: 87 x 1</span>
+<span class="co">#&gt;       bmi</span>
+<span class="co">#&gt;     &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 0.00260</span>
+<span class="co">#&gt; 2 0.00269</span>
+<span class="co">#&gt; 3 0.00347</span>
+<span class="co">#&gt; 4 0.00333</span>
+<span class="co">#&gt; 5 0.00218</span>
+<span class="co">#&gt; # … with 82 more rows</span>
+
+starwars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">height =</span> height <span class="op">/</span><span class="st"> </span><span class="dv">100</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">compute_bmi</span>()
+<span class="co">#&gt; # A tibble: 87 x 1</span>
+<span class="co">#&gt;     bmi</span>
+<span class="co">#&gt;   &lt;dbl&gt;</span>
+<span class="co">#&gt; 1  26.0</span>
+<span class="co">#&gt; 2  26.9</span>
+<span class="co">#&gt; 3  34.7</span>
+<span class="co">#&gt; 4  33.3</span>
+<span class="co">#&gt; 5  21.8</span>
+<span class="co">#&gt; # … with 82 more rows</span></code></pre>
+<p>Spending your programming time on the domain logic of your function, such as input and scale validation, may have a greater payoff than learning tidy eval just to improve its syntax. It makes your function more robust to faulty data and reduces the risks of erroneous analyses.</p>
+</div>
+<div id="sec:automating-loops" class="section level2">
+<h2><span class="header-section-number">3.2</span> Automating loops</h2>
+<p>Most programming problems involve <strong>iteration</strong> because data transformations are typically achieved element by element, by applying the same recipe over and over again. There are two main ways of automating iteration in R, <strong>vectorisation</strong> and <strong>mapping</strong>. Learning how to juggle with the different ways of expressing loops is not only an important step towards acquiring a good command of R and the tidyverse, it will also make you more proficient at solving programming problems.</p>
+<div id="vectorisation-in-dplyr" class="section level3">
+<h3><span class="header-section-number">3.2.1</span> Vectorisation in dplyr</h3>
+<p>dplyr is designed to optimise iteration by taking advantage of the vectorisation of many R functions. Rowwise vectorisation is achieved through normal R rules, which dplyr augments with groupwise vectorisation.</p>
+<div id="rowwise-vectorisation" class="section level4">
+<h4><span class="header-section-number">3.2.1.1</span> Rowwise vectorisation</h4>
+<p>Rowwise vectorisation in dplyr is a consequence of normal R rules for vectorisation. A vectorised function is a function that works the same way with vectors of 1 element as with vectors of <em>n</em> elements. The operation is applied elementwise (often at the machine code level, which makes them very efficient). We have already mentioned the vectorisation of <code>toupper()</code>, and many other functions in R are vectorised. One important class of vectorised functions is the arithmetic operators:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Dividing 1 element</span>
+<span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="dv">10</span>
+<span class="co">#&gt; [1] 0.1</span>
+
+<span class="co"># Dividing 5 elements</span>
+<span class="dv">1</span><span class="op">:</span><span class="dv">5</span> <span class="op">/</span><span class="st"> </span><span class="dv">10</span>
+<span class="co">#&gt; [1] 0.1 0.2 0.3 0.4 0.5</span></code></pre>
+<p>Technically, a function is vectorised when:</p>
+<ul>
+<li>It returns a vector as long as the input.</li>
+<li>Applying the function on a single element yields the same result than applying it on the whole vector and then subsetting the element.</li>
+</ul>
+<p>In other words, a vectorised function <code>fn</code> fulfills the following identity:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fn</span>(x[[i]]) <span class="op">==</span><span class="st"> </span><span class="kw">fn</span>(x)[[i]]</code></pre>
+<p>When you mix vectorised and non-vectorised operations, the combined operation is itself vectorised when the last operation to run is vectorised. Here we’ll combine the vectorised <code>/</code> function with the summary function <code>mean()</code>. The result of this operation is a vector that has the same length as the LHS of <code>/</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">5</span>
+x <span class="op">/</span><span class="st"> </span><span class="kw">mean</span>(x)
+<span class="co">#&gt; [1] 0.33 0.67 1.00 1.33 1.67</span></code></pre>
+<p>Note that the other combination of operations is not vectorised because in that case the summary operation has the last word:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(x <span class="op">/</span><span class="st"> </span><span class="dv">10</span>)
+<span class="co">#&gt; [1] 0.3</span></code></pre>
+<p>The dplyr verb <code>mutate()</code> expects vector semantics. The operations defining new columns typically return vectors as long as their inputs:</p>
+<pre class="sourceCode r"><code class="sourceCode r">data &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">x =</span> <span class="kw">rnorm</span>(<span class="dv">5</span>, <span class="dt">sd =</span> <span class="dv">10</span>))
+
+data <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">rescaled =</span> x <span class="op">/</span><span class="st"> </span><span class="kw">sd</span>(x))
+<span class="co">#&gt; # A tibble: 5 x 2</span>
+<span class="co">#&gt;          x rescaled</span>
+<span class="co">#&gt;      &lt;dbl&gt;    &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 -14.0    -1.09   </span>
+<span class="co">#&gt; 2   2.55    0.199  </span>
+<span class="co">#&gt; 3 -24.4    -1.90   </span>
+<span class="co">#&gt; 4  -0.0557 -0.00434</span>
+<span class="co">#&gt; 5   6.22    0.484</span></code></pre>
+<p>In fact, <code>mutate()</code> enforces vectorisation. Returning a smaller vector is an error unless it has size 1. If the result of a mutate expression has size 1, it is automatically recycled to the tibble or group size. This ensures that all columns have the same length and fit within the tibble constraints of rectangular data:</p>
+<pre class="sourceCode r"><code class="sourceCode r">data <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sigma =</span> <span class="kw">sd</span>(x))
+<span class="co">#&gt; # A tibble: 5 x 2</span>
+<span class="co">#&gt;          x sigma</span>
+<span class="co">#&gt;      &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 -14.0     12.8</span>
+<span class="co">#&gt; 2   2.55    12.8</span>
+<span class="co">#&gt; 3 -24.4     12.8</span>
+<span class="co">#&gt; 4  -0.0557  12.8</span>
+<span class="co">#&gt; 5   6.22    12.8</span></code></pre>
+<p>In contrast to <code>mutate()</code>, the dplyr verb <code>summarise()</code> expects summary operations that return a single value:</p>
+<pre class="sourceCode r"><code class="sourceCode r">data <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="kw">sd</span>(x))
+<span class="co">#&gt; # A tibble: 1 x 1</span>
+<span class="co">#&gt;   `sd(x)`</span>
+<span class="co">#&gt;     &lt;dbl&gt;</span>
+<span class="co">#&gt; 1    12.8</span></code></pre>
+</div>
+<div id="groupwise-vectorisation" class="section level4">
+<h4><span class="header-section-number">3.2.1.2</span> Groupwise vectorisation</h4>
+<p>Things get interesting with grouped tibbles. dplyr augments the vectorisation of normal R functions with groupwise vectorisation. If your tibble has <code>ngroup</code> groups, the operations are repeated <code>ngroup</code> times.</p>
+<pre class="sourceCode r"><code class="sourceCode r">my_division &lt;-<span class="st"> </span><span class="cf">function</span>(x, y) {
+  <span class="kw">message</span>(<span class="st">&quot;I was just called&quot;</span>)
+  x <span class="op">/</span><span class="st"> </span>y
+}
+
+<span class="co"># Called 1 time</span>
+data <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">new =</span> <span class="kw">my_division</span>(x, <span class="dv">10</span>))
+<span class="co">#&gt; I was just called</span>
+<span class="co">#&gt; # A tibble: 5 x 2</span>
+<span class="co">#&gt;          x      new</span>
+<span class="co">#&gt;      &lt;dbl&gt;    &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 -14.0    -1.40   </span>
+<span class="co">#&gt; 2   2.55    0.255  </span>
+<span class="co">#&gt; 3 -24.4    -2.44   </span>
+<span class="co">#&gt; 4  -0.0557 -0.00557</span>
+<span class="co">#&gt; 5   6.22    0.622</span>
+
+gdata &lt;-<span class="st"> </span>data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(<span class="dt">g =</span> <span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>))
+
+<span class="co"># Called 3 times</span>
+gdata <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">new =</span> <span class="kw">my_division</span>(x, <span class="dv">10</span>))
+<span class="co">#&gt; I was just called</span>
+<span class="co">#&gt; I was just called</span>
+<span class="co">#&gt; I was just called</span>
+<span class="co">#&gt; # A tibble: 5 x 3</span>
+<span class="co">#&gt; # Groups:   g [3]</span>
+<span class="co">#&gt;          x g          new</span>
+<span class="co">#&gt;      &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 -14.0    a     -1.40   </span>
+<span class="co">#&gt; 2   2.55   a      0.255  </span>
+<span class="co">#&gt; 3 -24.4    b     -2.44   </span>
+<span class="co">#&gt; 4  -0.0557 b     -0.00557</span>
+<span class="co">#&gt; 5   6.22   c      0.622</span></code></pre>
+<p>If the operation is entirely vectorised, the result will be the same whether the tibble is grouped or not, since elementwise computations are not affected by the values of other elements. But as soon as summary operations are involved, the result depends on the grouping structure because the summaries are computed from group sections instead of whole columns.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Marginal rescaling</span>
+data <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">new =</span> x <span class="op">/</span><span class="st"> </span><span class="kw">sd</span>(x))
+<span class="co">#&gt; # A tibble: 5 x 2</span>
+<span class="co">#&gt;          x      new</span>
+<span class="co">#&gt;      &lt;dbl&gt;    &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 -14.0    -1.09   </span>
+<span class="co">#&gt; 2   2.55    0.199  </span>
+<span class="co">#&gt; 3 -24.4    -1.90   </span>
+<span class="co">#&gt; 4  -0.0557 -0.00434</span>
+<span class="co">#&gt; 5   6.22    0.484</span>
+
+<span class="co"># Conditional rescaling</span>
+gdata <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">new =</span> x <span class="op">/</span><span class="st"> </span><span class="kw">sd</span>(x))
+<span class="co">#&gt; # A tibble: 5 x 3</span>
+<span class="co">#&gt; # Groups:   g [3]</span>
+<span class="co">#&gt;          x g          new</span>
+<span class="co">#&gt;      &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 -14.0    a     -1.20   </span>
+<span class="co">#&gt; 2   2.55   a      0.218  </span>
+<span class="co">#&gt; 3 -24.4    b     -1.42   </span>
+<span class="co">#&gt; 4  -0.0557 b     -0.00324</span>
+<span class="co">#&gt; 5   6.22   c     NA</span></code></pre>
+<p>Whereas rowwise vectorisation automates loops over the elements of a column, groupwise vectorisation automates loops over the levels of a grouping specification. The combination of these is very powerful.</p>
+</div>
+</div>
+<div id="looping-over-columns" class="section level3">
+<h3><span class="header-section-number">3.2.2</span> Looping over columns</h3>
+<p>Rowwise and groupwise vectorisations are means of looping in the direction of rows, applying the same operation to each group and each element. What if you’d like to apply an operation in the direction of columns? This is possible in dplyr by <strong>mapping</strong> functions over columns.</p>
+<p>Mapping functions is part of the <a href="https://adv-r.hadley.nz/fp.html">functional programming</a> approach. If you’re going to spend some time learning new programming concepts, acquiring functional programming skills is likely to have a higher payoff than learning about the metaprogramming concepts of tidy evaluation. Functional programming is inherent to R as it underlies the <code>apply()</code> family of functions in base R and the <code>map()</code> family from the <a href="https://purrr.tidyverse.org/">purrr package</a>. It is a powerful tool to add to your quiver.</p>
+<div id="mapping-functions" class="section level4">
+<h4><span class="header-section-number">3.2.2.1</span> Mapping functions</h4>
+<p>Everything that exists in R is an object, including functions. If you type the name of a function without parentheses, you get the function object instead of the result of calling the function:</p>
+<pre class="sourceCode r"><code class="sourceCode r">toupper
+<span class="co">#&gt; function (x) </span>
+<span class="co">#&gt; {</span>
+<span class="co">#&gt;     if (!is.character(x)) </span>
+<span class="co">#&gt;         x &lt;- as.character(x)</span>
+<span class="co">#&gt;     .Internal(toupper(x))</span>
+<span class="co">#&gt; }</span>
+<span class="co">#&gt; &lt;bytecode: 0x7f8dd20ca538&gt;</span>
+<span class="co">#&gt; &lt;environment: namespace:base&gt;</span></code></pre>
+<p>In its simplest form, functional programming is about passing a function object as argument to another function called a <strong>mapper</strong> function, that iterates over a vector to apply the function on each element, and returns all results in a new vector. In other words, a mapper functions writes loops so you don’t have to. Here is a manual loop that applies <code>toupper()</code> over all elements of a character vector and returns a new vector:</p>
+<pre class="sourceCode r"><code class="sourceCode r">new &lt;-<span class="st"> </span><span class="kw">character</span>(<span class="kw">length</span>(letters))
+
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">seq_along</span>(letters)) {
+  new[[i]] &lt;-<span class="st"> </span><span class="kw">toupper</span>(letters[[i]])
+}
+
+new
+<span class="co">#&gt;  [1] &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;D&quot; &quot;E&quot; &quot;F&quot; &quot;G&quot; &quot;H&quot; &quot;I&quot; &quot;J&quot; &quot;K&quot; &quot;L&quot; &quot;M&quot; &quot;N&quot; &quot;O&quot; &quot;P&quot; &quot;Q&quot;</span>
+<span class="co">#&gt; [18] &quot;R&quot; &quot;S&quot; &quot;T&quot; &quot;U&quot; &quot;V&quot; &quot;W&quot; &quot;X&quot; &quot;Y&quot; &quot;Z&quot;</span></code></pre>
+<p>Using a mapper function results in much leaner code. Here we apply <code>toupper()</code> over all elements of <code>letters</code> and return the results as a character vector, as indicated by the suffix <code>_chr</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r">new &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map_chr</span>(letters, toupper)
+new
+<span class="co">#&gt;  [1] &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;D&quot; &quot;E&quot; &quot;F&quot; &quot;G&quot; &quot;H&quot; &quot;I&quot; &quot;J&quot; &quot;K&quot; &quot;L&quot; &quot;M&quot; &quot;N&quot; &quot;O&quot; &quot;P&quot; &quot;Q&quot;</span>
+<span class="co">#&gt; [18] &quot;R&quot; &quot;S&quot; &quot;T&quot; &quot;U&quot; &quot;V&quot; &quot;W&quot; &quot;X&quot; &quot;Y&quot; &quot;Z&quot;</span></code></pre>
+<p>In practice, functional programming is all about hiding <code>for</code> loops, which are abstracted away by the mapper functions that automate the iteration.</p>
+<p>Mapping is an elegant way of transforming data element by element, but it’s not the only one. For instance, <code>toupper()</code> is actually a vectorised function that already operates on whole vectors element by element. The fastest and leanest code is just:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">toupper</span>(letters)
+<span class="co">#&gt;  [1] &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;D&quot; &quot;E&quot; &quot;F&quot; &quot;G&quot; &quot;H&quot; &quot;I&quot; &quot;J&quot; &quot;K&quot; &quot;L&quot; &quot;M&quot; &quot;N&quot; &quot;O&quot; &quot;P&quot; &quot;Q&quot;</span>
+<span class="co">#&gt; [18] &quot;R&quot; &quot;S&quot; &quot;T&quot; &quot;U&quot; &quot;V&quot; &quot;W&quot; &quot;X&quot; &quot;Y&quot; &quot;Z&quot;</span></code></pre>
+<p>Mapping functions are more useful with functions that are not vectorised or for computations over lists and data frame columns where the vectorisation occurs within the elements or columns themselves. In the following example, we apply a summarising function over all columns of a data frame:</p>
+<pre class="sourceCode r"><code class="sourceCode r">purrr<span class="op">::</span><span class="kw">map_int</span>(mtcars, n_distinct)
+<span class="co">#&gt;  mpg  cyl disp   hp drat   wt qsec   vs   am gear carb </span>
+<span class="co">#&gt;   25    3   27   22   22   29   30    2    2    3    6</span></code></pre>
+</div>
+<div id="scoped-dplyr-variants" class="section level4">
+<h4><span class="header-section-number">3.2.2.2</span> Scoped dplyr variants</h4>
+<p>dplyr provides variants of the main data manipulation verbs that map functions over a selection of columns. These verbs are known as the <a href="https://dplyr.tidyverse.org/reference/scoped.html">scoped variants</a> and are recognizable from their <code>_at</code>, <code>_if</code> and <code>_all</code> suffixes.</p>
+<p>Scoped verbs support three sorts of selection:</p>
+<ol style="list-style-type: decimal">
+<li><p><code>_all</code> verbs operate on all columns of the data frame. You can summarise all columns of a data frame within groups with <code>summarise_all()</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r">iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Species) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise_all</span>(mean)
+<span class="co">#&gt; # A tibble: 3 x 5</span>
+<span class="co">#&gt;   Species    Sepal.Length Sepal.Width Petal.Length Petal.Width</span>
+<span class="co">#&gt;   &lt;fct&gt;             &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 setosa             5.01        3.43         1.46       0.246</span>
+<span class="co">#&gt; 2 versicolor         5.94        2.77         4.26       1.33 </span>
+<span class="co">#&gt; 3 virginica          6.59        2.97         5.55       2.03</span></code></pre></li>
+<li><p><code>_if</code> verbs operate conditionally, on all columns for which a predicate returns <code>TRUE</code>. If you are familiar with purrr, the idea is similar to the conditional mapper <code>purrr::map_if()</code>. Promoting all character columns of a data frame as grouping variables is as simple as:</p>
+<pre class="sourceCode r"><code class="sourceCode r">starwars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by_if</span>(is.character)
+<span class="co">#&gt; # A tibble: 87 x 13</span>
+<span class="co">#&gt; # Groups:   name, hair_color, skin_color, eye_color, gender, homeworld,</span>
+<span class="co">#&gt; #   species [87]</span>
+<span class="co">#&gt;   name  height  mass hair_color skin_color eye_color birth_year gender</span>
+<span class="co">#&gt;   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; </span>
+<span class="co">#&gt; 1 Luke…    172    77 blond      fair       blue            19   male  </span>
+<span class="co">#&gt; 2 C-3PO    167    75 &lt;NA&gt;       gold       yellow         112   &lt;NA&gt;  </span>
+<span class="co">#&gt; 3 R2-D2     96    32 &lt;NA&gt;       white, bl… red             33   &lt;NA&gt;  </span>
+<span class="co">#&gt; 4 Dart…    202   136 none       white      yellow          41.9 male  </span>
+<span class="co">#&gt; 5 Leia…    150    49 brown      light      brown           19   female</span>
+<span class="co">#&gt; # … with 82 more rows, and 5 more variables: homeworld &lt;chr&gt;,</span>
+<span class="co">#&gt; #   species &lt;chr&gt;, films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;</span></code></pre></li>
+<li><p><code>_at</code> verbs operate on a selection of columns. You can supply integer vectors of column positions or character vectors of colunm names.</p>
+<pre class="sourceCode r"><code class="sourceCode r">mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise_at</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, mean)
+<span class="co">#&gt;   mpg cyl</span>
+<span class="co">#&gt; 1  20 6.2</span>
+
+mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise_at</span>(<span class="kw">c</span>(<span class="st">&quot;disp&quot;</span>, <span class="st">&quot;drat&quot;</span>), median)
+<span class="co">#&gt;   disp drat</span>
+<span class="co">#&gt; 1  196  3.7</span></code></pre>
+<p>More interestingly, you can use <code>vars()</code><a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> to supply the same sort of expressions you would pass to <code>select()</code>! The selection helpers make it very convenient to craft a selection of columns to map over.</p>
+<pre class="sourceCode r"><code class="sourceCode r">starwars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise_at</span>(<span class="kw">vars</span>(height<span class="op">:</span>mass), mean)
+<span class="co">#&gt; # A tibble: 1 x 2</span>
+<span class="co">#&gt;   height  mass</span>
+<span class="co">#&gt;    &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt; 1     NA    NA</span>
+
+starwars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise_at</span>(<span class="kw">vars</span>(<span class="kw">ends_with</span>(<span class="st">&quot;_color&quot;</span>)), n_distinct)
+<span class="co">#&gt; # A tibble: 1 x 3</span>
+<span class="co">#&gt;   hair_color skin_color eye_color</span>
+<span class="co">#&gt;        &lt;int&gt;      &lt;int&gt;     &lt;int&gt;</span>
+<span class="co">#&gt; 1         13         31        15</span></code></pre></li>
+</ol>
+<p>The scoped variants of <code>mutate()</code> and <code>summarise()</code> are the closest analogue to <code>base::lapply()</code> and <code>purrr::map()</code>. Unlike pure list mappers, the scoped verbs fully implement the dplyr semantics, such as groupwise vectorisation or the summary constraints:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># map() returns a simple list with the results</span>
+mtcars[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>] <span class="op">%&gt;%</span><span class="st"> </span>purrr<span class="op">::</span><span class="kw">map</span>(mean)
+<span class="co">#&gt; $mpg</span>
+<span class="co">#&gt; [1] 20</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $cyl</span>
+<span class="co">#&gt; [1] 6.2</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $disp</span>
+<span class="co">#&gt; [1] 231</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $hp</span>
+<span class="co">#&gt; [1] 147</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $drat</span>
+<span class="co">#&gt; [1] 3.6</span>
+
+<span class="co"># `mutate_` variants recycle to group size</span>
+mtcars[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate_all</span>(mean)
+<span class="co">#&gt; # A tibble: 32 x 5</span>
+<span class="co">#&gt;     mpg   cyl  disp    hp  drat</span>
+<span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt; 1  20.1  6.19  231.  147.  3.60</span>
+<span class="co">#&gt; 2  20.1  6.19  231.  147.  3.60</span>
+<span class="co">#&gt; 3  20.1  6.19  231.  147.  3.60</span>
+<span class="co">#&gt; 4  20.1  6.19  231.  147.  3.60</span>
+<span class="co">#&gt; 5  20.1  6.19  231.  147.  3.60</span>
+<span class="co">#&gt; # … with 27 more rows</span>
+
+<span class="co"># `summarise_` variants enforce a size 1 constraint</span>
+mtcars[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise_all</span>(mean)
+<span class="co">#&gt; # A tibble: 1 x 5</span>
+<span class="co">#&gt;     mpg   cyl  disp    hp  drat</span>
+<span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt; 1  20.1  6.19  231.  147.  3.60</span>
+
+<span class="co"># All scoped verbs know about groups</span>
+mtcars[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(cyl) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise_all</span>(mean)
+<span class="co">#&gt; # A tibble: 3 x 5</span>
+<span class="co">#&gt;     cyl   mpg  disp    hp  drat</span>
+<span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt; 1     4  26.7  105.  82.6  4.07</span>
+<span class="co">#&gt; 2     6  19.7  183. 122.   3.59</span>
+<span class="co">#&gt; 3     8  15.1  353. 209.   3.23</span></code></pre>
+<p>The other scoped variants also accept optional functions to map over the selection of columns. For instance, you could group by a selection of variables and transform them on the fly:</p>
+<pre class="sourceCode r"><code class="sourceCode r">iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by_if</span>(is.factor, as.character)
+<span class="co">#&gt; # A tibble: 150 x 5</span>
+<span class="co">#&gt; # Groups:   Species [3]</span>
+<span class="co">#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
+<span class="co">#&gt;          &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;  </span>
+<span class="co">#&gt; 1          5.1         3.5          1.4         0.2 setosa </span>
+<span class="co">#&gt; 2          4.9         3            1.4         0.2 setosa </span>
+<span class="co">#&gt; 3          4.7         3.2          1.3         0.2 setosa </span>
+<span class="co">#&gt; 4          4.6         3.1          1.5         0.2 setosa </span>
+<span class="co">#&gt; 5          5           3.6          1.4         0.2 setosa </span>
+<span class="co">#&gt; # … with 145 more rows</span></code></pre>
+<p>or transform the column names of selected variables:</p>
+<pre class="sourceCode r"><code class="sourceCode r">storms <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select_at</span>(<span class="kw">vars</span>(name<span class="op">:</span>hour), toupper)
+<span class="co">#&gt; # A tibble: 10,010 x 5</span>
+<span class="co">#&gt;   NAME   YEAR MONTH   DAY  HOUR</span>
+<span class="co">#&gt;   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 Amy    1975     6    27     0</span>
+<span class="co">#&gt; 2 Amy    1975     6    27     6</span>
+<span class="co">#&gt; 3 Amy    1975     6    27    12</span>
+<span class="co">#&gt; 4 Amy    1975     6    27    18</span>
+<span class="co">#&gt; 5 Amy    1975     6    28     0</span>
+<span class="co">#&gt; # … with 10,005 more rows</span></code></pre>
+<p>The scoped variants lie at the intersection of purrr and dplyr and combine the rowwise looping mechanisms of dplyr with the columnwise mapping of purrr. This is a powerful combination.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="3">
+<li id="fn3"><p><code>vars()</code> is the function that does the quoting of your expressions, and returns blueprints to its caller. This pattern of letting an external helper quote the arguments is called <a href="dplyr.html#sec:external-quoting">external quoting</a>.<a href="sec-do-you-need.html#fnref3" class="footnote-back">↩</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="sec-why-how.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="sec-up-to-speed.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": false,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/ShixiangWang/tidyeval/edit/master/introduction.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>5 Dealing with multiple arguments | Tidy evaluation</title>
+  <meta name="description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数" />
+  <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="5 Dealing with multiple arguments | Tidy evaluation" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数" />
+  <meta name="github-repo" content="tidyverse/tidyeval" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="5 Dealing with multiple arguments | Tidy evaluation" />
+  
+  <meta name="twitter:description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数" />
+  
+
+<meta name="author" content="Lionel Henry" />
+<meta name="author" content="Hadley Wickham" />
+<meta name="author" content="王诗翔（译）" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="sec-up-to-speed.html">
+<link rel="next" href="modifying-inputs.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-115082821-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-115082821-1');
+</script>
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="adv-r.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><strong><a href="./">Tidy evaluation</a></strong></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>欢迎</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#other-resources"><i class="fa fa-check"></i>Other resources</a></li>
+</ul></li>
+<li class="part"><span><b>I Principles</b></span></li>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="sec-why-how.html"><a href="sec-why-how.html"><i class="fa fa-check"></i><b>2</b> Why and how</a><ul>
+<li class="chapter" data-level="2.1" data-path="sec-why-how.html"><a href="sec-why-how.html#data-masking"><i class="fa fa-check"></i><b>2.1</b> Data masking</a></li>
+<li class="chapter" data-level="2.2" data-path="sec-why-how.html"><a href="sec-why-how.html#quoting-code"><i class="fa fa-check"></i><b>2.2</b> Quoting code</a></li>
+<li class="chapter" data-level="2.3" data-path="sec-why-how.html"><a href="sec-why-how.html#unquoting-code"><i class="fa fa-check"></i><b>2.3</b> Unquoting code</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html"><i class="fa fa-check"></i><b>3</b> Do you need tidy eval?</a><ul>
+<li class="chapter" data-level="3.1" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#sec:fixed-colnames"><i class="fa fa-check"></i><b>3.1</b> Fixed column names</a></li>
+<li class="chapter" data-level="3.2" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#sec:automating-loops"><i class="fa fa-check"></i><b>3.2</b> Automating loops</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#vectorisation-in-dplyr"><i class="fa fa-check"></i><b>3.2.1</b> Vectorisation in dplyr</a></li>
+<li class="chapter" data-level="3.2.2" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#looping-over-columns"><i class="fa fa-check"></i><b>3.2.2</b> Looping over columns</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html"><i class="fa fa-check"></i><b>4</b> Getting up to speed</a><ul>
+<li class="chapter" data-level="4.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#writing-functions"><i class="fa fa-check"></i><b>4.1</b> Writing functions</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#reducing-duplication"><i class="fa fa-check"></i><b>4.1.1</b> Reducing duplication</a></li>
+<li class="chapter" data-level="4.1.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#whats-special-about-quoting-functions"><i class="fa fa-check"></i><b>4.1.2</b> What’s special about quoting functions?</a></li>
+<li class="chapter" data-level="4.1.3" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#unquotation"><i class="fa fa-check"></i><b>4.1.3</b> Unquotation</a></li>
+<li class="chapter" data-level="4.1.4" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#understanding-with-qq_show"><i class="fa fa-check"></i><b>4.1.4</b> Understanding <code>!!</code> with <code>qq_show()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#quote-and-unquote"><i class="fa fa-check"></i><b>4.2</b> Quote and unquote</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#the-abstraction-step"><i class="fa fa-check"></i><b>4.2.1</b> The abstraction step</a></li>
+<li class="chapter" data-level="4.2.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#the-quoting-step"><i class="fa fa-check"></i><b>4.2.2</b> The quoting step</a></li>
+<li class="chapter" data-level="4.2.3" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#the-unquoting-step"><i class="fa fa-check"></i><b>4.2.3</b> The unquoting step</a></li>
+<li class="chapter" data-level="4.2.4" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#result"><i class="fa fa-check"></i><b>4.2.4</b> Result</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#strings-instead-of-quotes"><i class="fa fa-check"></i><b>4.3</b> Strings instead of quotes</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#strings"><i class="fa fa-check"></i><b>4.3.1</b> Strings</a></li>
+<li class="chapter" data-level="4.3.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#character-vectors-of-column-names"><i class="fa fa-check"></i><b>4.3.2</b> Character vectors of column names</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="multiple.html"><a href="multiple.html"><i class="fa fa-check"></i><b>5</b> Dealing with multiple arguments</a><ul>
+<li class="chapter" data-level="5.1" data-path="multiple.html"><a href="multiple.html#the-...-argument"><i class="fa fa-check"></i><b>5.1</b> The <code>...</code> argument</a></li>
+<li class="chapter" data-level="5.2" data-path="multiple.html"><a href="multiple.html#simple-forwarding-of-..."><i class="fa fa-check"></i><b>5.2</b> Simple forwarding of <code>...</code></a></li>
+<li class="chapter" data-level="5.3" data-path="multiple.html"><a href="multiple.html#quote-multiple-arguments"><i class="fa fa-check"></i><b>5.3</b> Quote multiple arguments</a></li>
+<li class="chapter" data-level="5.4" data-path="multiple.html"><a href="multiple.html#unquote-multiple-arguments"><i class="fa fa-check"></i><b>5.4</b> Unquote multiple arguments</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="modifying-inputs.html"><a href="modifying-inputs.html"><i class="fa fa-check"></i><b>6</b> Modifying inputs</a><ul>
+<li class="chapter" data-level="6.1" data-path="modifying-inputs.html"><a href="modifying-inputs.html#modifying-names"><i class="fa fa-check"></i><b>6.1</b> Modifying names</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="modifying-inputs.html"><a href="modifying-inputs.html#default-argument-names"><i class="fa fa-check"></i><b>6.1.1</b> Default argument names</a></li>
+<li class="chapter" data-level="6.1.2" data-path="modifying-inputs.html"><a href="modifying-inputs.html#unquoting-argument-names"><i class="fa fa-check"></i><b>6.1.2</b> Unquoting argument names</a></li>
+<li class="chapter" data-level="6.1.3" data-path="modifying-inputs.html"><a href="modifying-inputs.html#prefixing-quoted-arguments"><i class="fa fa-check"></i><b>6.1.3</b> Prefixing quoted arguments</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="modifying-inputs.html"><a href="modifying-inputs.html#modifying-quoted-expressions"><i class="fa fa-check"></i><b>6.2</b> Modifying quoted expressions</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="modifying-inputs.html"><a href="modifying-inputs.html#expanding-quoted-expressions-with-expr"><i class="fa fa-check"></i><b>6.2.1</b> Expanding quoted expressions with <code>expr()</code></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>7</b> Glossary</a><ul>
+<li class="chapter" data-level="7.1" data-path="glossary.html"><a href="glossary.html#data-structures"><i class="fa fa-check"></i><b>7.1</b> Data structures</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="glossary.html"><a href="glossary.html#glossary-data-mask"><i class="fa fa-check"></i><b>7.1.1</b> TODO Data mask</a></li>
+<li class="chapter" data-level="7.1.2" data-path="glossary.html"><a href="glossary.html#glossary-expr"><i class="fa fa-check"></i><b>7.1.2</b> Expression</a></li>
+<li class="chapter" data-level="7.1.3" data-path="glossary.html"><a href="glossary.html#expression-base"><i class="fa fa-check"></i><b>7.1.3</b> Expression (base)</a></li>
+<li class="chapter" data-level="7.1.4" data-path="glossary.html"><a href="glossary.html#glossary-sym"><i class="fa fa-check"></i><b>7.1.4</b> TODO Symbol</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="glossary.html"><a href="glossary.html#programming-concepts"><i class="fa fa-check"></i><b>7.2</b> Programming Concepts</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="glossary.html"><a href="glossary.html#glossary-constant-symbolic"><i class="fa fa-check"></i><b>7.2.1</b> Constant versus symbolic</a></li>
+<li class="chapter" data-level="7.2.2" data-path="glossary.html"><a href="glossary.html#glossary-nse"><i class="fa fa-check"></i><b>7.2.2</b> TODO Non-Standard Evaluation (NSE)</a></li>
+<li class="chapter" data-level="7.2.3" data-path="glossary.html"><a href="glossary.html#glossary-quotation-evaluation"><i class="fa fa-check"></i><b>7.2.3</b> TODO Quotation versus Evaluation</a></li>
+<li class="chapter" data-level="7.2.4" data-path="glossary.html"><a href="glossary.html#glossary-qq"><i class="fa fa-check"></i><b>7.2.4</b> TODO Quasiquotation</a></li>
+<li class="chapter" data-level="7.2.5" data-path="glossary.html"><a href="glossary.html#glossary-parse"><i class="fa fa-check"></i><b>7.2.5</b> TODO Parsing</a></li>
+<li class="chapter" data-level="7.2.6" data-path="glossary.html"><a href="glossary.html#glossary-metaprogramming"><i class="fa fa-check"></i><b>7.2.6</b> TODO Metaprogramming</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>II Cookbooks</b></span></li>
+<li class="chapter" data-level="8" data-path="dplyr.html"><a href="dplyr.html"><i class="fa fa-check"></i><b>8</b> dplyr</a><ul>
+<li class="chapter" data-level="8.1" data-path="dplyr.html"><a href="dplyr.html#patterns-for-single-arguments"><i class="fa fa-check"></i><b>8.1</b> Patterns for single arguments</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="dplyr.html"><a href="dplyr.html#enquo-and---quote-and-unquote-arguments"><i class="fa fa-check"></i><b>8.1.1</b> <code>enquo()</code> and <code>!!</code> - Quote and unquote arguments</a></li>
+<li class="chapter" data-level="8.1.2" data-path="dplyr.html"><a href="dplyr.html#quo_name---create-default-column-names"><i class="fa fa-check"></i><b>8.1.2</b> <code>quo_name()</code> - Create default column names</a></li>
+<li class="chapter" data-level="8.1.3" data-path="dplyr.html"><a href="dplyr.html#and---unquote-column-names"><i class="fa fa-check"></i><b>8.1.3</b> <code>:=</code> and <code>!!</code> - Unquote column names</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="dplyr.html"><a href="dplyr.html#patterns-for-multiple-arguments"><i class="fa fa-check"></i><b>8.2</b> Patterns for multiple arguments</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="dplyr.html"><a href="dplyr.html#forward-multiple-arguments"><i class="fa fa-check"></i><b>8.2.1</b> <code>...</code> - Forward multiple arguments</a></li>
+<li class="chapter" data-level="8.2.2" data-path="dplyr.html"><a href="dplyr.html#enquos-and---quote-and-unquote-multiple-arguments"><i class="fa fa-check"></i><b>8.2.2</b> <code>enquos()</code> and <code>!!!</code> - Quote and unquote multiple arguments</a></li>
+<li class="chapter" data-level="8.2.3" data-path="dplyr.html"><a href="dplyr.html#expr---modify-quoted-arguments"><i class="fa fa-check"></i><b>8.2.3</b> <code>expr()</code> - Modify quoted arguments</a></li>
+<li class="chapter" data-level="8.2.4" data-path="dplyr.html"><a href="dplyr.html#sec:external-quoting"><i class="fa fa-check"></i><b>8.2.4</b> <code>vars()</code> - Quote multiple arguments externally</a></li>
+<li class="chapter" data-level="8.2.5" data-path="dplyr.html"><a href="dplyr.html#enquos.named-true---automatically-add-default-names"><i class="fa fa-check"></i><b>8.2.5</b> <code>enquos(.named = TRUE)</code> - Automatically add default names</a></li>
+<li class="chapter" data-level="8.2.6" data-path="dplyr.html"><a href="dplyr.html#quos_auto_name---manually-add-default-names"><i class="fa fa-check"></i><b>8.2.6</b> <code>quos_auto_name()</code> - Manually add default names</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="dplyr.html"><a href="dplyr.html#select"><i class="fa fa-check"></i><b>8.3</b> <code>select()</code></a></li>
+<li class="chapter" data-level="8.4" data-path="dplyr.html"><a href="dplyr.html#filter"><i class="fa fa-check"></i><b>8.4</b> <code>filter()</code></a></li>
+<li class="chapter" data-level="8.5" data-path="dplyr.html"><a href="dplyr.html#case_when"><i class="fa fa-check"></i><b>8.5</b> <code>case_when()</code></a></li>
+<li class="chapter" data-level="8.6" data-path="dplyr.html"><a href="dplyr.html#gotchas"><i class="fa fa-check"></i><b>8.6</b> Gotchas</a><ul>
+<li class="chapter" data-level="8.6.1" data-path="dplyr.html"><a href="dplyr.html#nested-quoting-functions"><i class="fa fa-check"></i><b>8.6.1</b> Nested quoting functions</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="ggplot2.html"><a href="ggplot2.html"><i class="fa fa-check"></i><b>9</b> ggplot2</a></li>
+<li class="part"><span><b>III Going further</b></span></li>
+<li class="chapter" data-level="10" data-path="a-rich-toolbox.html"><a href="a-rich-toolbox.html"><i class="fa fa-check"></i><b>10</b> A rich toolbox</a><ul>
+<li class="chapter" data-level="10.1" data-path="a-rich-toolbox.html"><a href="a-rich-toolbox.html#todo-quote-expr-and-enexpr"><i class="fa fa-check"></i><b>10.1</b> TODO <code>quote()</code>, <code>expr()</code> and <code>enexpr()</code></a></li>
+<li class="chapter" data-level="10.2" data-path="a-rich-toolbox.html"><a href="a-rich-toolbox.html#todo-quo-and-enquo"><i class="fa fa-check"></i><b>10.2</b> TODO <code>quo()</code> and <code>enquo()</code></a></li>
+<li class="chapter" data-level="10.3" data-path="a-rich-toolbox.html"><a href="a-rich-toolbox.html#todo-vars-quos-and-enquos"><i class="fa fa-check"></i><b>10.3</b> TODO <code>vars()</code>, <code>quos()</code> and <code>enquos()</code></a></li>
+<li class="chapter" data-level="10.4" data-path="a-rich-toolbox.html"><a href="a-rich-toolbox.html#toolbox-qq-show"><i class="fa fa-check"></i><b>10.4</b> TODO <code>qq_show()</code></a></li>
+<li class="chapter" data-level="10.5" data-path="a-rich-toolbox.html"><a href="a-rich-toolbox.html#todo-sym-and-syms"><i class="fa fa-check"></i><b>10.5</b> TODO <code>sym()</code> and <code>syms()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="creating-grammars.html"><a href="creating-grammars.html"><i class="fa fa-check"></i><b>11</b> Creating grammars</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Tidy evaluation</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="multiple" class="section level1">
+<h1><span class="header-section-number">5</span> Dealing with multiple arguments</h1>
+<p>In the first chapter we have created <code>grouped_mean()</code>, a function that takes one grouping variable and one summary variable and computes the grouped average. It would make sense to take multiple grouping variables instead of just one. Quoting and unquoting multiple variables is pretty much the same process as for single arguments:</p>
+<ul>
+<li><p>Unquoting multiple arguments requires a variant of <code>!!</code>, the big bang operator <code>!!!</code>.</p></li>
+<li><p>Quoting multiple arguments can be done in two ways: internal quoting with the plural variant <code>enquos()</code> and external quoting with <code>vars()</code>.</p></li>
+</ul>
+<div id="the-...-argument" class="section level2">
+<h2><span class="header-section-number">5.1</span> The <code>...</code> argument</h2>
+<p>The dot-dot-dot argument is one of the nicest aspects of the R language. A function that takes <code>...</code> accepts any number of arguments, named or unnamed. As a programmer you can do three things with <code>...</code>:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Evaluate</strong> the arguments contained in the dots and materialise them in a list by forwarding the dots to <code>list()</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r">materialise &lt;-<span class="st"> </span><span class="cf">function</span>(data, ...) {
+    dots &lt;-<span class="st"> </span><span class="kw">list</span>(...)
+    dots
+}</code></pre>
+<p>The dots names conveniently become the names of the list:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">materialise</span>(mtcars, <span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span>, <span class="dt">important_name =</span> letters)
+<span class="co">#&gt; [[1]]</span>
+<span class="co">#&gt; [1] 3</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $important_name</span>
+<span class="co">#&gt;  [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot; &quot;f&quot; &quot;g&quot; &quot;h&quot; &quot;i&quot; &quot;j&quot; &quot;k&quot; &quot;l&quot; &quot;m&quot; &quot;n&quot; &quot;o&quot; &quot;p&quot; &quot;q&quot;</span>
+<span class="co">#&gt; [18] &quot;r&quot; &quot;s&quot; &quot;t&quot; &quot;u&quot; &quot;v&quot; &quot;w&quot; &quot;x&quot; &quot;y&quot; &quot;z&quot;</span></code></pre></li>
+<li><p><strong>Quote</strong> the arguments in the dots with <code>enquos()</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r">capture &lt;-<span class="st"> </span><span class="cf">function</span>(data, ...) {
+    dots &lt;-<span class="st"> </span><span class="kw">enquos</span>(...)
+    dots
+}</code></pre>
+<p>All arguments passed to <code>...</code> are automatically quoted and returned as a list. The names of the arguments become the names of that list:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">capture</span>(mtcars, <span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span>, <span class="dt">important_name =</span> letters)
+<span class="co">#&gt; &lt;list_of&lt;quosure&gt;&gt;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[1]]</span>
+<span class="co">#&gt; &lt;quosure&gt;</span>
+<span class="co">#&gt; expr: ^1 + 2</span>
+<span class="co">#&gt; env:  global</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $important_name</span>
+<span class="co">#&gt; &lt;quosure&gt;</span>
+<span class="co">#&gt; expr: ^letters</span>
+<span class="co">#&gt; env:  global</span></code></pre></li>
+<li><p><strong>Forward</strong> the dots to another function:</p>
+<pre class="sourceCode r"><code class="sourceCode r">forward &lt;-<span class="st"> </span><span class="cf">function</span>(data, ...) {
+  <span class="kw">forwardee</span>(...)
+}</code></pre>
+<p>When dots are forwarded the names of arguments in <code>...</code> are matched to the arguments of the forwardee:</p>
+<pre class="sourceCode r"><code class="sourceCode r">forwardee &lt;-<span class="st"> </span><span class="cf">function</span>(foo, bar, ...) {
+  <span class="kw">list</span>(<span class="dt">foo =</span> foo, <span class="dt">bar =</span> bar, ...)
+}</code></pre>
+<p>Let’s call the forwarding function with a bunch of named and unnamed arguments:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">forward</span>(mtcars, <span class="dt">bar =</span> <span class="dv">100</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)
+<span class="co">#&gt; $foo</span>
+<span class="co">#&gt; [1] 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $bar</span>
+<span class="co">#&gt; [1] 100</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[3]]</span>
+<span class="co">#&gt; [1] 2</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[4]]</span>
+<span class="co">#&gt; [1] 3</span></code></pre>
+<p>The unnamed argument <code>1</code> was matched to <code>foo</code> positionally. The named argument <code>bar</code> was matched to <code>bar</code>. The remaining arguments were passed in order.</p></li>
+</ol>
+<p>For the purpose of writing tidy eval functions the last two techniques are important. There are two distinct situations:</p>
+<ol style="list-style-type: decimal">
+<li><p>You don’t need to modify the arguments in any way, just passing them through. Then simply forward <code>...</code> to other quoting functions in the ordinary way.</p></li>
+<li><p>You’d like to change the argument names (which become column names in <code>dplyr::mutate()</code> calls) or modify the arguments themselves (for instance negate a <code>dplyr::select()</code>ion). In that case you’ll need to use <code>enquos()</code> to <em>quote</em> the arguments in the dots. You’ll then pass the quoted arguments to other quoting functions by <em>forwarding</em> them with the help of <code>!!!</code>.</p></li>
+</ol>
+</div>
+<div id="simple-forwarding-of-..." class="section level2">
+<h2><span class="header-section-number">5.2</span> Simple forwarding of <code>...</code></h2>
+<p>If you are not modifying the arguments in <code>...</code> in any way and just want to pass them to another quoting function, just forward <code>...</code> like usual! There is no need for quoting and unquoting because of the magic of forwarding. The arguments in <code>...</code> are transported to their final destination where they will be quoted.</p>
+<p>The function <code>grouped_mean()</code> is still going to need some remodelling because it is good practice to take all important named arguments before the dots. Let’s start by swapping <code>grouped_var</code> and <code>summary_var</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r">grouped_mean &lt;-<span class="st"> </span><span class="cf">function</span>(data, summary_var, group_var) {
+  summary_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(summary_var)
+  group_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(group_var)
+
+  data <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">group_by</span>(<span class="op">!!</span>group_var) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">summarise</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(<span class="op">!!</span>summary_var))
+}</code></pre>
+<p>Then we replace <code>group_var</code> with <code>...</code> and pass it to <code>group_by()</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r">grouped_mean &lt;-<span class="st"> </span><span class="cf">function</span>(data, summary_var, ...) {
+  summary_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(summary_var)
+
+  data <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">group_by</span>(...) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">summarise</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(<span class="op">!!</span>summary_var))
+}</code></pre>
+<p>It is good practice to make one final adjustment. Because arguments in <code>...</code> can have arbitrary names, we don’t want to “use up” valid names. In tidyverse packages we use the convention of prefixing named arguments with a dot so that conflicts are less likely:</p>
+<pre class="sourceCode r"><code class="sourceCode r">grouped_mean &lt;-<span class="st"> </span><span class="cf">function</span>(.data, .summary_var, ...) {
+  .summary_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(.summary_var)
+
+  .data <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">group_by</span>(...) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">summarise</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(<span class="op">!!</span>.summary_var))
+}</code></pre>
+<p>Let’s check this function now works with any number of grouping variables:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">grouped_mean</span>(mtcars, disp, cyl, am)
+<span class="co">#&gt; # A tibble: 6 x 3</span>
+<span class="co">#&gt; # Groups:   cyl [3]</span>
+<span class="co">#&gt;     cyl    am  mean</span>
+<span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt; 1     4     0 136. </span>
+<span class="co">#&gt; 2     4     1  93.6</span>
+<span class="co">#&gt; 3     6     0 205. </span>
+<span class="co">#&gt; 4     6     1 155  </span>
+<span class="co">#&gt; 5     8     0 358. </span>
+<span class="co">#&gt; # … with 1 more row</span>
+
+<span class="kw">grouped_mean</span>(mtcars, disp, cyl, am, vs)
+<span class="co">#&gt; # A tibble: 7 x 4</span>
+<span class="co">#&gt; # Groups:   cyl, am [6]</span>
+<span class="co">#&gt;     cyl    am    vs  mean</span>
+<span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt; 1     4     0     1 136. </span>
+<span class="co">#&gt; 2     4     1     0 120. </span>
+<span class="co">#&gt; 3     4     1     1  89.8</span>
+<span class="co">#&gt; 4     6     0     1 205. </span>
+<span class="co">#&gt; 5     6     1     0 155  </span>
+<span class="co">#&gt; # … with 2 more rows</span></code></pre>
+</div>
+<div id="quote-multiple-arguments" class="section level2">
+<h2><span class="header-section-number">5.3</span> Quote multiple arguments</h2>
+<p>When we need to modify the arguments or their names, we can’t simply forward the dots. We’ll have to quote and unquote with the plural variants of <code>enquo()</code> and <code>!!</code>.</p>
+<ul>
+<li>We’ll quote the dots with <code>enquos()</code>.</li>
+<li>We’ll unquote-splice the quoted dots with <code>!!!</code>.</li>
+</ul>
+<p>While the singular <code>enquo()</code> returns a single quoted argument, the plural variant <code>enquos()</code> returns a list of quoted arguments. Let’s use it to quote the dots:</p>
+<pre class="sourceCode r"><code class="sourceCode r">grouped_mean2 &lt;-<span class="st"> </span><span class="cf">function</span>(data, summary_var, ...) {
+  summary_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(summary_var)
+  group_vars &lt;-<span class="st"> </span><span class="kw">enquos</span>(...)
+
+  data <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">group_by</span>(<span class="op">!!</span>group_vars) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">summarise</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(<span class="op">!!</span>summary_var))
+}</code></pre>
+<p><code>grouped_mean()</code> now accepts and automatically quotes any number of grouping variables. However it doesn’t work quite yet:</p>
+<p><strong>FIXME</strong>: Depend on dev rlang to get a better error message.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">grouped_mean2</span>(mtcars, disp, cyl, am)
+<span class="co">#&gt; Error: Column `&lt;S3: quosures&gt;` must be length 32 (the number of rows) or one, not 2</span></code></pre>
+<p>Instead of <em>forwarding</em> the individual arguments to <code>group_by()</code> we have passed the list of arguments itself! Unquoting is not the right operation here. Fortunately tidy eval provides a special operator that makes it easy to forward a list of arguments.</p>
+</div>
+<div id="unquote-multiple-arguments" class="section level2">
+<h2><span class="header-section-number">5.4</span> Unquote multiple arguments</h2>
+<p>The <strong>unquote-splice</strong> operator <code>!!!</code> takes each element of a list and unquotes them as independent arguments to the surrounding function call. The arguments are <em>spliced</em> in the function call. This is just what we need for forwarding multiple quoted arguments.</p>
+<p>Let’s use <code>qq_show()</code> to observe the difference between <code>!!</code> and <code>!!!</code> in a <code>group_by()</code> expression. We can only use <code>enquos()</code> within a function so let’s create a list of quoted names for the purpose of experimenting:</p>
+<pre class="sourceCode r"><code class="sourceCode r">vars &lt;-<span class="st"> </span><span class="kw">list</span>(
+  <span class="kw">quote</span>(cyl),
+  <span class="kw">quote</span>(am)
+)</code></pre>
+<p><code>qq_show()</code> shows the difference between unquoting a list and unquote-splicing a list:</p>
+<pre class="sourceCode r"><code class="sourceCode r">rlang<span class="op">::</span><span class="kw">qq_show</span>(<span class="kw">group_by</span>(<span class="op">!!</span>vars))
+<span class="co">#&gt; group_by(&lt;list: cyl, am&gt;)</span>
+
+rlang<span class="op">::</span><span class="kw">qq_show</span>(<span class="kw">group_by</span>(<span class="op">!!!</span>vars))
+<span class="co">#&gt; group_by(cyl, am)</span></code></pre>
+<p>When we use the unquote operator <code>!!</code>, <code>group_by()</code> gets a list of expressions. When we unquote-splice with <code>!!!</code>, the expressions are forwarded as individual arguments to <code>group_by()</code>. Let’s use the latter to fix <code>grouped_mean2()</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r">grouped_mean2 &lt;-<span class="st"> </span><span class="cf">function</span>(.data, .summary_var, ...) {
+  summary_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(.summary_var)
+  group_vars &lt;-<span class="st"> </span><span class="kw">enquos</span>(...)
+
+  .data <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">group_by</span>(<span class="op">!!!</span>group_vars) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">summarise</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(<span class="op">!!</span>summary_var))
+}</code></pre>
+<p>The quote and unquote version of <code>grouped_mean()</code> does a bit more work but is functionally identical to the forwarding version:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">grouped_mean</span>(mtcars, disp, cyl, am)
+<span class="co">#&gt; # A tibble: 6 x 3</span>
+<span class="co">#&gt; # Groups:   cyl [3]</span>
+<span class="co">#&gt;     cyl    am  mean</span>
+<span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt; 1     4     0 136. </span>
+<span class="co">#&gt; 2     4     1  93.6</span>
+<span class="co">#&gt; 3     6     0 205. </span>
+<span class="co">#&gt; 4     6     1 155  </span>
+<span class="co">#&gt; 5     8     0 358. </span>
+<span class="co">#&gt; # … with 1 more row</span>
+
+<span class="kw">grouped_mean2</span>(mtcars, disp, cyl, am)
+<span class="co">#&gt; # A tibble: 6 x 3</span>
+<span class="co">#&gt; # Groups:   cyl [3]</span>
+<span class="co">#&gt;     cyl    am  mean</span>
+<span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt; 1     4     0 136. </span>
+<span class="co">#&gt; 2     4     1  93.6</span>
+<span class="co">#&gt; 3     6     0 205. </span>
+<span class="co">#&gt; 4     6     1 155  </span>
+<span class="co">#&gt; 5     8     0 358. </span>
+<span class="co">#&gt; # … with 1 more row</span></code></pre>
+<p>When does it become useful to do all this extra work? Whenever you need to modify the arguments or their names.</p>
+<p>Up to now we have used the quote-and-unquote pattern to pass quoted arguments to other quoting functions “as is”. With this simple and powerful pattern you can extract complex combinations of quoting verbs into reusable functions.</p>
+<p>However tidy eval provides much more flexibility. It is a general purpose meta-programming framework that makes it easy to modify quoted arguments before evaluation. In the next section you’ll learn about basic metaprogramming patterns that will allow you to modify expressions before passing them on to other functions.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="sec-up-to-speed.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="modifying-inputs.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": false,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/ShixiangWang/tidyeval/edit/master/dotdotdot.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
