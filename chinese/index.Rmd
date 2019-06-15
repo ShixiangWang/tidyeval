@@ -5,28 +5,28 @@ author: ["Lionel Henry", "Hadley Wickham", "王诗翔（译）"]
 
 description: "这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数"
 
-github-repo: tidyverse/tidyeval
+github-repo: ShixiangWang/tidyeval-chinese
 site: bookdown::bookdown_site
 documentclass: book
 ---
 
 # 欢迎 {-}
 
-The primary goal of this book is to get you up to speed with tidy evaluation by showing you how to write functions using tidyverse pipelines and grammars. The book is written and organised so that you can quickly find the information you need to solve real world problems without having to "get" tidy eval first:
+这本书的主要目的是通过向你展示如何使用 tidyverse 流程和语法编写函数来让你跟上 tidy evaluation 的进度。这本书是以这样一种方式编写和组织的：你可以快速找到你需要解决现实世界问题的信息，而不用先精通 tidy eval：
 
-* The first chapter *Getting up to speed* is a quick introduction to the main pattern used in all tidy eval functions: **quote and unquote**.
+* 第一部分*原理*是所有 tidy eval 函数主要模式的快速介绍，包括**引用（quote）和去引用（ unquote）**。
 
-* The *Cookbooks* sections are organised by common tasks for the dplyr and ggplot2 packages.
+* 第二部分*食谱*根据 **dplyr** 和 **ggplot2** 包常见任务进行组织。
 
-Though this is a work in progress, we hope you'll find this bookdown valuable for programming with tidyverse interfaces.
+尽量这一切仍然在进展之中，我们希望你会发现这本 **bookdown** 生成的电子书有益于学习使用 **tidyverse** 接口编程。
 
 
-## Other resources {-}
+## 其他资源 {-}
 
-You may also be interested in:
+你可能对下面的信息会感兴趣：
 
-* __"[Tidy eval in 5 minutes](https://www.youtube.com/watch?v=nERXS3ssntw)"__ is a quick 5 minutes video that explains the big ideas behind tidy evaluation. It's a great way to get an overview of concepts before diving in other tutorials.
+* **“[5 分钟学习 tidy eval](https://www.youtube.com/watch?v=nERXS3ssntw)”**是一个5分钟的视频，它解释了 tidy evaluation 背后的主要思想。它是深入其他教程之前获取概念总览的绝好方式。
 
-* __"[Tidy eval webinar](https://www.rstudio.com/resources/webinars/tidy-eval/)"__ is a one hour tutorial video on tidy evaluation.
+* **“[Tidy eval 讲座](https://www.rstudio.com/resources/webinars/tidy-eval/)”**是一个1小时的关于 tidy evaluation 的视频教程。
 
-* __"[The second edition of Advanced R](http://adv-r.hadley.nz/)"__ which includes a whole chapter on meta programming with tidy eval.
+* **“[Advanced R（第二版）](http://adv-r.hadley.nz/)”**使用了一整个章节介绍使用 tidy eval 进行元编程。

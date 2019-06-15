@@ -1,5 +1,5 @@
 
-# (PART) Principles {-}
+# (PART) 原理 {-}
 
 ```{r setup, include = FALSE}
 source("setup.R")
@@ -7,12 +7,13 @@ library("dplyr")
 ```
 
 
-# Introduction
+# 介绍
 
-Tidyverse grammars, like dplyr, have a distinctive look and feel. This is in part because they are designed to follow a set of [principles](https://principles.tidyverse.org/). The most important feature of tidyverse grammars is that they let you work with your data as if they were actual objects in your workspace. In a way, the data frame itself becomes a (temporary) workspace.
+Tidyverse 语法，像 dplyr，有着完全不同的外观和使用体验。这部分源自于它们遵循一系列[原理](https://principles.tidyverse.org/)。Tidyverse 语法最重要的特性是它们让你的数据像实际工作空间中的对象一样被处理。简而言之，数据框本身变成了一个（临时的）工作空间。 
 
-Data masking makes it easy and natural to read and write data manipulation code, but it has a flip side. It is easier to refer to objects in the mask when you know their names in advance, but it is harder when the names are unknown at the time of writing. In particular, it is harder to make _indirect references_ with column names stored in variables or passed as function arguments.
+数据隐藏让读写数据操作代码变得简单和自然，但是它也有另一方面。当你事先知道隐藏对象的名字，指向它们会简单点，但在写代码的时候如果不知道的话就很麻烦了。特别是当使用存储在变量里面的列名创建*间接指向（indirect references）*或者作为函数参数时。
 
+Tidy evaluation 是一系列的概念和工具，它让当数据框列被间接指定时使用 tidyverse 语法变得可能。
 Tidy evaluation is a set of concepts and tools that make it possible to use tidyverse grammars when columns are specified indirectly. In particular, you will need to learn some tidy eval to extract a tidyverse pipeline in a reusable function.
 
 The first chapter [Why and how](#sec:why-how) provides the motivation for tidy eval, presents the problems that it poses in day-to-day programming, and the general theory and tools for solving those. If you are in a hurry, you can jump straight to [Do you need tidy eval?](#sec:do-you-need). A lot can be done without writing a single line of tidy eval! If you are positive you need it to solve your problem, [Getting up to speed](#sec:up-to-speed) is a self-contained chapter that will teach you the basic workflow of wrapping a tidyverse pipeline in a reusable function. The book ends with a series of recipes and idioms for solving various dplyr and ggplot2 problems.
