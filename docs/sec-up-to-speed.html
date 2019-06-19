@@ -1,19 +1,20 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html >
+
 <head>
 
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>4 Getting up to speed | Tidy evaluation</title>
-  <meta name="description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数" />
-  <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
+  <meta name="description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
   <meta property="og:title" content="4 Getting up to speed | Tidy evaluation" />
   <meta property="og:type" content="book" />
   
   
   <meta property="og:description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数" />
-  <meta name="github-repo" content="tidyverse/tidyeval" />
+  <meta name="github-repo" content="ShixiangWang/tidyeval-chinese" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="4 Getting up to speed | Tidy evaluation" />
@@ -21,15 +22,15 @@
   <meta name="twitter:description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数" />
   
 
-<meta name="author" content="Lionel Henry" />
-<meta name="author" content="Hadley Wickham" />
-<meta name="author" content="王诗翔（译）" />
+<meta name="author" content="Lionel Henry">
+<meta name="author" content="Hadley Wickham">
+<meta name="author" content="王诗翔（译）">
 
 
 
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
 <link rel="prev" href="sec-do-you-need.html">
@@ -140,10 +141,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>欢迎</a><ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#other-resources"><i class="fa fa-check"></i>Other resources</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#e585b6e4bb96e8b584e6ba90"><i class="fa fa-check"></i>其他资源</a></li>
 </ul></li>
-<li class="part"><span><b>I Principles</b></span></li>
-<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="part"><span><b>I 原理</b></span></li>
+<li class="chapter" data-level="1" data-path="section-1.html"><a href="section-1.html"><i class="fa fa-check"></i><b>1</b> 介绍</a></li>
 <li class="chapter" data-level="2" data-path="sec-why-how.html"><a href="sec-why-how.html"><i class="fa fa-check"></i><b>2</b> Why and how</a><ul>
 <li class="chapter" data-level="2.1" data-path="sec-why-how.html"><a href="sec-why-how.html#data-masking"><i class="fa fa-check"></i><b>2.1</b> Data masking</a></li>
 <li class="chapter" data-level="2.2" data-path="sec-why-how.html"><a href="sec-why-how.html#quoting-code"><i class="fa fa-check"></i><b>2.2</b> Quoting code</a></li>
@@ -507,11 +508,6 @@ by_cyl &lt;-<span class="st"> </span>mtcars <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">summarise</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(<span class="op">!!</span>y_var))  <span class="co"># Open y_var</span></code></pre></li>
 <li><p>In ggplot2 <code>aes()</code> is the main quoting function:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;ggplot2&quot;</span>)
-<span class="co">#&gt; Registered S3 methods overwritten by &#39;ggplot2&#39;:</span>
-<span class="co">#&gt;   method         from </span>
-<span class="co">#&gt;   [.quosures     rlang</span>
-<span class="co">#&gt;   c.quosures     rlang</span>
-<span class="co">#&gt;   print.quosures rlang</span>
 
 <span class="kw">ggplot</span>(mtcars, <span class="kw">aes</span>(<span class="op">!!</span>x_var, <span class="op">!!</span>y_var)) <span class="op">+</span><span class="st">  </span><span class="co"># Open x_var and y_var</span>
 <span class="st">  </span><span class="kw">geom_point</span>()</code></pre>

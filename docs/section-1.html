@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>5 Dealing with multiple arguments | Tidy evaluation</title>
+  <title>1 介绍 | Tidy evaluation</title>
   <meta name="description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="5 Dealing with multiple arguments | Tidy evaluation" />
+  <meta property="og:title" content="1 介绍 | Tidy evaluation" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   <meta name="github-repo" content="ShixiangWang/tidyeval-chinese" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="5 Dealing with multiple arguments | Tidy evaluation" />
+  <meta name="twitter:title" content="1 介绍 | Tidy evaluation" />
   
   <meta name="twitter:description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数" />
   
@@ -33,8 +33,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="sec-up-to-speed.html">
-<link rel="next" href="modifying-inputs.html">
+<link rel="prev" href="index.html">
+<link rel="next" href="sec-why-how.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -256,212 +256,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="multiple" class="section level1">
-<h1><span class="header-section-number">5</span> Dealing with multiple arguments</h1>
-<p>In the first chapter we have created <code>grouped_mean()</code>, a function that takes one grouping variable and one summary variable and computes the grouped average. It would make sense to take multiple grouping variables instead of just one. Quoting and unquoting multiple variables is pretty much the same process as for single arguments:</p>
-<ul>
-<li><p>Unquoting multiple arguments requires a variant of <code>!!</code>, the big bang operator <code>!!!</code>.</p></li>
-<li><p>Quoting multiple arguments can be done in two ways: internal quoting with the plural variant <code>enquos()</code> and external quoting with <code>vars()</code>.</p></li>
-</ul>
-<div id="the-...-argument" class="section level2">
-<h2><span class="header-section-number">5.1</span> The <code>...</code> argument</h2>
-<p>The dot-dot-dot argument is one of the nicest aspects of the R language. A function that takes <code>...</code> accepts any number of arguments, named or unnamed. As a programmer you can do three things with <code>...</code>:</p>
-<ol style="list-style-type: decimal">
-<li><p><strong>Evaluate</strong> the arguments contained in the dots and materialise them in a list by forwarding the dots to <code>list()</code>:</p>
-<pre class="sourceCode r"><code class="sourceCode r">materialise &lt;-<span class="st"> </span><span class="cf">function</span>(data, ...) {
-    dots &lt;-<span class="st"> </span><span class="kw">list</span>(...)
-    dots
-}</code></pre>
-<p>The dots names conveniently become the names of the list:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">materialise</span>(mtcars, <span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span>, <span class="dt">important_name =</span> letters)
-<span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt; [1] 3</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $important_name</span>
-<span class="co">#&gt;  [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot; &quot;f&quot; &quot;g&quot; &quot;h&quot; &quot;i&quot; &quot;j&quot; &quot;k&quot; &quot;l&quot; &quot;m&quot; &quot;n&quot; &quot;o&quot; &quot;p&quot; &quot;q&quot;</span>
-<span class="co">#&gt; [18] &quot;r&quot; &quot;s&quot; &quot;t&quot; &quot;u&quot; &quot;v&quot; &quot;w&quot; &quot;x&quot; &quot;y&quot; &quot;z&quot;</span></code></pre></li>
-<li><p><strong>Quote</strong> the arguments in the dots with <code>enquos()</code>:</p>
-<pre class="sourceCode r"><code class="sourceCode r">capture &lt;-<span class="st"> </span><span class="cf">function</span>(data, ...) {
-    dots &lt;-<span class="st"> </span><span class="kw">enquos</span>(...)
-    dots
-}</code></pre>
-<p>All arguments passed to <code>...</code> are automatically quoted and returned as a list. The names of the arguments become the names of that list:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">capture</span>(mtcars, <span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span>, <span class="dt">important_name =</span> letters)
-<span class="co">#&gt; &lt;list_of&lt;quosure&gt;&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt; &lt;quosure&gt;</span>
-<span class="co">#&gt; expr: ^1 + 2</span>
-<span class="co">#&gt; env:  global</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $important_name</span>
-<span class="co">#&gt; &lt;quosure&gt;</span>
-<span class="co">#&gt; expr: ^letters</span>
-<span class="co">#&gt; env:  global</span></code></pre></li>
-<li><p><strong>Forward</strong> the dots to another function:</p>
-<pre class="sourceCode r"><code class="sourceCode r">forward &lt;-<span class="st"> </span><span class="cf">function</span>(data, ...) {
-  <span class="kw">forwardee</span>(...)
-}</code></pre>
-<p>When dots are forwarded the names of arguments in <code>...</code> are matched to the arguments of the forwardee:</p>
-<pre class="sourceCode r"><code class="sourceCode r">forwardee &lt;-<span class="st"> </span><span class="cf">function</span>(foo, bar, ...) {
-  <span class="kw">list</span>(<span class="dt">foo =</span> foo, <span class="dt">bar =</span> bar, ...)
-}</code></pre>
-<p>Let’s call the forwarding function with a bunch of named and unnamed arguments:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">forward</span>(mtcars, <span class="dt">bar =</span> <span class="dv">100</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)
-<span class="co">#&gt; $foo</span>
-<span class="co">#&gt; [1] 1</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $bar</span>
-<span class="co">#&gt; [1] 100</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[3]]</span>
-<span class="co">#&gt; [1] 2</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[4]]</span>
-<span class="co">#&gt; [1] 3</span></code></pre>
-<p>The unnamed argument <code>1</code> was matched to <code>foo</code> positionally. The named argument <code>bar</code> was matched to <code>bar</code>. The remaining arguments were passed in order.</p></li>
-</ol>
-<p>For the purpose of writing tidy eval functions the last two techniques are important. There are two distinct situations:</p>
-<ol style="list-style-type: decimal">
-<li><p>You don’t need to modify the arguments in any way, just passing them through. Then simply forward <code>...</code> to other quoting functions in the ordinary way.</p></li>
-<li><p>You’d like to change the argument names (which become column names in <code>dplyr::mutate()</code> calls) or modify the arguments themselves (for instance negate a <code>dplyr::select()</code>ion). In that case you’ll need to use <code>enquos()</code> to <em>quote</em> the arguments in the dots. You’ll then pass the quoted arguments to other quoting functions by <em>forwarding</em> them with the help of <code>!!!</code>.</p></li>
-</ol>
-</div>
-<div id="simple-forwarding-of-..." class="section level2">
-<h2><span class="header-section-number">5.2</span> Simple forwarding of <code>...</code></h2>
-<p>If you are not modifying the arguments in <code>...</code> in any way and just want to pass them to another quoting function, just forward <code>...</code> like usual! There is no need for quoting and unquoting because of the magic of forwarding. The arguments in <code>...</code> are transported to their final destination where they will be quoted.</p>
-<p>The function <code>grouped_mean()</code> is still going to need some remodelling because it is good practice to take all important named arguments before the dots. Let’s start by swapping <code>grouped_var</code> and <code>summary_var</code>:</p>
-<pre class="sourceCode r"><code class="sourceCode r">grouped_mean &lt;-<span class="st"> </span><span class="cf">function</span>(data, summary_var, group_var) {
-  summary_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(summary_var)
-  group_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(group_var)
-
-  data <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">group_by</span>(<span class="op">!!</span>group_var) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">summarise</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(<span class="op">!!</span>summary_var))
-}</code></pre>
-<p>Then we replace <code>group_var</code> with <code>...</code> and pass it to <code>group_by()</code>:</p>
-<pre class="sourceCode r"><code class="sourceCode r">grouped_mean &lt;-<span class="st"> </span><span class="cf">function</span>(data, summary_var, ...) {
-  summary_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(summary_var)
-
-  data <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">group_by</span>(...) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">summarise</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(<span class="op">!!</span>summary_var))
-}</code></pre>
-<p>It is good practice to make one final adjustment. Because arguments in <code>...</code> can have arbitrary names, we don’t want to “use up” valid names. In tidyverse packages we use the convention of prefixing named arguments with a dot so that conflicts are less likely:</p>
-<pre class="sourceCode r"><code class="sourceCode r">grouped_mean &lt;-<span class="st"> </span><span class="cf">function</span>(.data, .summary_var, ...) {
-  .summary_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(.summary_var)
-
-  .data <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">group_by</span>(...) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">summarise</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(<span class="op">!!</span>.summary_var))
-}</code></pre>
-<p>Let’s check this function now works with any number of grouping variables:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">grouped_mean</span>(mtcars, disp, cyl, am)
-<span class="co">#&gt; # A tibble: 6 x 3</span>
-<span class="co">#&gt; # Groups:   cyl [3]</span>
-<span class="co">#&gt;     cyl    am  mean</span>
-<span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt; 1     4     0 136. </span>
-<span class="co">#&gt; 2     4     1  93.6</span>
-<span class="co">#&gt; 3     6     0 205. </span>
-<span class="co">#&gt; 4     6     1 155  </span>
-<span class="co">#&gt; 5     8     0 358. </span>
-<span class="co">#&gt; # … with 1 more row</span>
-
-<span class="kw">grouped_mean</span>(mtcars, disp, cyl, am, vs)
-<span class="co">#&gt; # A tibble: 7 x 4</span>
-<span class="co">#&gt; # Groups:   cyl, am [6]</span>
-<span class="co">#&gt;     cyl    am    vs  mean</span>
-<span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt; 1     4     0     1 136. </span>
-<span class="co">#&gt; 2     4     1     0 120. </span>
-<span class="co">#&gt; 3     4     1     1  89.8</span>
-<span class="co">#&gt; 4     6     0     1 205. </span>
-<span class="co">#&gt; 5     6     1     0 155  </span>
-<span class="co">#&gt; # … with 2 more rows</span></code></pre>
-</div>
-<div id="quote-multiple-arguments" class="section level2">
-<h2><span class="header-section-number">5.3</span> Quote multiple arguments</h2>
-<p>When we need to modify the arguments or their names, we can’t simply forward the dots. We’ll have to quote and unquote with the plural variants of <code>enquo()</code> and <code>!!</code>.</p>
-<ul>
-<li>We’ll quote the dots with <code>enquos()</code>.</li>
-<li>We’ll unquote-splice the quoted dots with <code>!!!</code>.</li>
-</ul>
-<p>While the singular <code>enquo()</code> returns a single quoted argument, the plural variant <code>enquos()</code> returns a list of quoted arguments. Let’s use it to quote the dots:</p>
-<pre class="sourceCode r"><code class="sourceCode r">grouped_mean2 &lt;-<span class="st"> </span><span class="cf">function</span>(data, summary_var, ...) {
-  summary_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(summary_var)
-  group_vars &lt;-<span class="st"> </span><span class="kw">enquos</span>(...)
-
-  data <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">group_by</span>(<span class="op">!!</span>group_vars) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">summarise</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(<span class="op">!!</span>summary_var))
-}</code></pre>
-<p><code>grouped_mean()</code> now accepts and automatically quotes any number of grouping variables. However it doesn’t work quite yet:</p>
-<p><strong>FIXME</strong>: Depend on dev rlang to get a better error message.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">grouped_mean2</span>(mtcars, disp, cyl, am)
-<span class="co">#&gt; Error: Column `&lt;S3: quosures&gt;` must be length 32 (the number of rows) or one, not 2</span></code></pre>
-<p>Instead of <em>forwarding</em> the individual arguments to <code>group_by()</code> we have passed the list of arguments itself! Unquoting is not the right operation here. Fortunately tidy eval provides a special operator that makes it easy to forward a list of arguments.</p>
-</div>
-<div id="unquote-multiple-arguments" class="section level2">
-<h2><span class="header-section-number">5.4</span> Unquote multiple arguments</h2>
-<p>The <strong>unquote-splice</strong> operator <code>!!!</code> takes each element of a list and unquotes them as independent arguments to the surrounding function call. The arguments are <em>spliced</em> in the function call. This is just what we need for forwarding multiple quoted arguments.</p>
-<p>Let’s use <code>qq_show()</code> to observe the difference between <code>!!</code> and <code>!!!</code> in a <code>group_by()</code> expression. We can only use <code>enquos()</code> within a function so let’s create a list of quoted names for the purpose of experimenting:</p>
-<pre class="sourceCode r"><code class="sourceCode r">vars &lt;-<span class="st"> </span><span class="kw">list</span>(
-  <span class="kw">quote</span>(cyl),
-  <span class="kw">quote</span>(am)
-)</code></pre>
-<p><code>qq_show()</code> shows the difference between unquoting a list and unquote-splicing a list:</p>
-<pre class="sourceCode r"><code class="sourceCode r">rlang<span class="op">::</span><span class="kw">qq_show</span>(<span class="kw">group_by</span>(<span class="op">!!</span>vars))
-<span class="co">#&gt; group_by(&lt;list: cyl, am&gt;)</span>
-
-rlang<span class="op">::</span><span class="kw">qq_show</span>(<span class="kw">group_by</span>(<span class="op">!!!</span>vars))
-<span class="co">#&gt; group_by(cyl, am)</span></code></pre>
-<p>When we use the unquote operator <code>!!</code>, <code>group_by()</code> gets a list of expressions. When we unquote-splice with <code>!!!</code>, the expressions are forwarded as individual arguments to <code>group_by()</code>. Let’s use the latter to fix <code>grouped_mean2()</code>:</p>
-<pre class="sourceCode r"><code class="sourceCode r">grouped_mean2 &lt;-<span class="st"> </span><span class="cf">function</span>(.data, .summary_var, ...) {
-  summary_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(.summary_var)
-  group_vars &lt;-<span class="st"> </span><span class="kw">enquos</span>(...)
-
-  .data <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">group_by</span>(<span class="op">!!!</span>group_vars) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">summarise</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(<span class="op">!!</span>summary_var))
-}</code></pre>
-<p>The quote and unquote version of <code>grouped_mean()</code> does a bit more work but is functionally identical to the forwarding version:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">grouped_mean</span>(mtcars, disp, cyl, am)
-<span class="co">#&gt; # A tibble: 6 x 3</span>
-<span class="co">#&gt; # Groups:   cyl [3]</span>
-<span class="co">#&gt;     cyl    am  mean</span>
-<span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt; 1     4     0 136. </span>
-<span class="co">#&gt; 2     4     1  93.6</span>
-<span class="co">#&gt; 3     6     0 205. </span>
-<span class="co">#&gt; 4     6     1 155  </span>
-<span class="co">#&gt; 5     8     0 358. </span>
-<span class="co">#&gt; # … with 1 more row</span>
-
-<span class="kw">grouped_mean2</span>(mtcars, disp, cyl, am)
-<span class="co">#&gt; # A tibble: 6 x 3</span>
-<span class="co">#&gt; # Groups:   cyl [3]</span>
-<span class="co">#&gt;     cyl    am  mean</span>
-<span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt; 1     4     0 136. </span>
-<span class="co">#&gt; 2     4     1  93.6</span>
-<span class="co">#&gt; 3     6     0 205. </span>
-<span class="co">#&gt; 4     6     1 155  </span>
-<span class="co">#&gt; 5     8     0 358. </span>
-<span class="co">#&gt; # … with 1 more row</span></code></pre>
-<p>When does it become useful to do all this extra work? Whenever you need to modify the arguments or their names.</p>
-<p>Up to now we have used the quote-and-unquote pattern to pass quoted arguments to other quoting functions “as is”. With this simple and powerful pattern you can extract complex combinations of quoting verbs into reusable functions.</p>
-<p>However tidy eval provides much more flexibility. It is a general purpose meta-programming framework that makes it easy to modify quoted arguments before evaluation. In the next section you’ll learn about basic metaprogramming patterns that will allow you to modify expressions before passing them on to other functions.</p>
-
-</div>
+<div id="section-1" class="section level1">
+<h1><span class="header-section-number">1</span> 介绍</h1>
+<p>Tidyverse 语法，像 dplyr，有着完全不同的外观和使用体验。这部分源自于它们遵循一系列<a href="https://principles.tidyverse.org/">原理</a>。Tidyverse 语法最重要的特性是它们让你的数据像实际工作空间中的对象一样被处理。简而言之，数据框本身变成了一个（临时的）工作空间。</p>
+<p>Data masking makes it easy and natural to read and write data manipulation code, but it has a flip side. It is easier to refer to objects in the mask when you know their names in advance, but it is harder when the names are unknown at the time of writing. In particular, it is harder to make <em>indirect references</em> with column names stored in variables or passed as function arguments.</p>
+<p>Tidy evaluation is a set of concepts and tools that make it possible to use tidyverse grammars when columns are specified indirectly. In particular, you will need to learn some tidy eval to extract a tidyverse pipeline in a reusable function.</p>
+<p>The first chapter <a href="sec-why-how.html#sec:why-how">Why and how</a> provides the motivation for tidy eval, presents the problems that it poses in day-to-day programming, and the general theory and tools for solving those. If you are in a hurry, you can jump straight to <a href="sec-do-you-need.html#sec:do-you-need">Do you need tidy eval?</a>. A lot can be done without writing a single line of tidy eval! If you are positive you need it to solve your problem, <a href="sec-up-to-speed.html#sec:up-to-speed">Getting up to speed</a> is a self-contained chapter that will teach you the basic workflow of wrapping a tidyverse pipeline in a reusable function. The book ends with a series of recipes and idioms for solving various dplyr and ggplot2 problems.</p>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="sec-up-to-speed.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="modifying-inputs.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="sec-why-how.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -491,7 +299,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/ShixiangWang/tidyeval/edit/master/dotdotdot.Rmd",
+"link": "https://github.com/ShixiangWang/tidyeval/edit/master/introduction.Rmd",
 "text": "Edit"
 },
 "history": {

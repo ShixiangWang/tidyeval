@@ -1,19 +1,20 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html >
+
 <head>
 
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Tidy evaluation</title>
-  <meta name="description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数" />
-  <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
+  <meta name="description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
   <meta property="og:title" content="Tidy evaluation" />
   <meta property="og:type" content="book" />
   
   
   <meta property="og:description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数" />
-  <meta name="github-repo" content="tidyverse/tidyeval" />
+  <meta name="github-repo" content="ShixiangWang/tidyeval-chinese" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Tidy evaluation" />
@@ -21,19 +22,19 @@
   <meta name="twitter:description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数" />
   
 
-<meta name="author" content="Lionel Henry" />
-<meta name="author" content="Hadley Wickham" />
-<meta name="author" content="王诗翔（译）" />
+<meta name="author" content="Lionel Henry">
+<meta name="author" content="Hadley Wickham">
+<meta name="author" content="王诗翔（译）">
 
 
 
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
 
-<link rel="next" href="introduction.html">
+<link rel="next" href="section-1.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -140,10 +141,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>欢迎</a><ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#other-resources"><i class="fa fa-check"></i>Other resources</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#e585b6e4bb96e8b584e6ba90"><i class="fa fa-check"></i>其他资源</a></li>
 </ul></li>
-<li class="part"><span><b>I Principles</b></span></li>
-<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="part"><span><b>I 原理</b></span></li>
+<li class="chapter" data-level="1" data-path="section-1.html"><a href="section-1.html"><i class="fa fa-check"></i><b>1</b> 介绍</a></li>
 <li class="chapter" data-level="2" data-path="sec-why-how.html"><a href="sec-why-how.html"><i class="fa fa-check"></i><b>2</b> Why and how</a><ul>
 <li class="chapter" data-level="2.1" data-path="sec-why-how.html"><a href="sec-why-how.html#data-masking"><i class="fa fa-check"></i><b>2.1</b> Data masking</a></li>
 <li class="chapter" data-level="2.2" data-path="sec-why-how.html"><a href="sec-why-how.html#quoting-code"><i class="fa fa-check"></i><b>2.2</b> Quoting code</a></li>
@@ -263,19 +264,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="e6aca2e8bf8e" class="section level1 unnumbered">
 <h1>欢迎</h1>
-<p>The primary goal of this book is to get you up to speed with tidy evaluation by showing you how to write functions using tidyverse pipelines and grammars. The book is written and organised so that you can quickly find the information you need to solve real world problems without having to “get” tidy eval first:</p>
+<p>这本书的主要目的是通过向你展示如何使用 tidyverse 流程和语法编写函数来让你跟上 tidy evaluation 的进度。这本书是以这样一种方式编写和组织的：你可以快速找到你需要解决现实世界问题的信息，而不用先精通 tidy eval：</p>
 <ul>
-<li><p>The first chapter <em>Getting up to speed</em> is a quick introduction to the main pattern used in all tidy eval functions: <strong>quote and unquote</strong>.</p></li>
-<li><p>The <em>Cookbooks</em> sections are organised by common tasks for the dplyr and ggplot2 packages.</p></li>
+<li><p>第一部分<em>原理</em>是所有 tidy eval 函数主要模式的快速介绍，包括<strong>引用（quote）和去引用（ unquote）</strong>。</p></li>
+<li><p>第二部分<em>食谱</em>根据 <strong>dplyr</strong> 和 <strong>ggplot2</strong> 包常见任务进行组织。</p></li>
 </ul>
-<p>Though this is a work in progress, we hope you’ll find this bookdown valuable for programming with tidyverse interfaces.</p>
-<div id="other-resources" class="section level2 unnumbered">
-<h2>Other resources</h2>
-<p>You may also be interested in:</p>
+<p>尽量这一切仍然在进展之中，我们希望你会发现这本 <strong>bookdown</strong> 生成的电子书有益于学习使用 <strong>tidyverse</strong> 接口编程。</p>
+<div id="e585b6e4bb96e8b584e6ba90" class="section level2 unnumbered">
+<h2>其他资源</h2>
+<p>你可能对下面的信息会感兴趣：</p>
 <ul>
-<li><p><strong>“<a href="https://www.youtube.com/watch?v=nERXS3ssntw">Tidy eval in 5 minutes</a>”</strong> is a quick 5 minutes video that explains the big ideas behind tidy evaluation. It’s a great way to get an overview of concepts before diving in other tutorials.</p></li>
-<li><p><strong>“<a href="https://www.rstudio.com/resources/webinars/tidy-eval/">Tidy eval webinar</a>”</strong> is a one hour tutorial video on tidy evaluation.</p></li>
-<li><p><strong>“<a href="http://adv-r.hadley.nz/">The second edition of Advanced R</a>”</strong> which includes a whole chapter on meta programming with tidy eval.</p></li>
+<li><p><strong>“<a href="https://www.youtube.com/watch?v=nERXS3ssntw">5 分钟学习 tidy eval</a>”</strong>是一个5分钟的视频，它解释了 tidy evaluation 背后的主要思想。它是深入其他教程之前获取概念总览的绝好方式。</p></li>
+<li><p><strong>“<a href="https://www.rstudio.com/resources/webinars/tidy-eval/">Tidy eval 讲座</a>”</strong>是一个1小时的关于 tidy evaluation 的视频教程。</p></li>
+<li><p><strong>“<a href="http://adv-r.hadley.nz/">Advanced R（第二版）</a>”</strong>使用了一整个章节介绍使用 tidy eval 进行元编程。</p></li>
 </ul>
 
 </div>
@@ -289,7 +290,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         </div>
       </div>
 
-<a href="introduction.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="section-1.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

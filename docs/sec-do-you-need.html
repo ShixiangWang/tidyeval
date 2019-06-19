@@ -1,19 +1,20 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html >
+
 <head>
 
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>3 Do you need tidy eval? | Tidy evaluation</title>
-  <meta name="description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数" />
-  <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
+  <meta name="description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
   <meta property="og:title" content="3 Do you need tidy eval? | Tidy evaluation" />
   <meta property="og:type" content="book" />
   
   
   <meta property="og:description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数" />
-  <meta name="github-repo" content="tidyverse/tidyeval" />
+  <meta name="github-repo" content="ShixiangWang/tidyeval-chinese" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="3 Do you need tidy eval? | Tidy evaluation" />
@@ -21,15 +22,15 @@
   <meta name="twitter:description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数" />
   
 
-<meta name="author" content="Lionel Henry" />
-<meta name="author" content="Hadley Wickham" />
-<meta name="author" content="王诗翔（译）" />
+<meta name="author" content="Lionel Henry">
+<meta name="author" content="Hadley Wickham">
+<meta name="author" content="王诗翔（译）">
 
 
 
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
 <link rel="prev" href="sec-why-how.html">
@@ -140,10 +141,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>欢迎</a><ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#other-resources"><i class="fa fa-check"></i>Other resources</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#e585b6e4bb96e8b584e6ba90"><i class="fa fa-check"></i>其他资源</a></li>
 </ul></li>
-<li class="part"><span><b>I Principles</b></span></li>
-<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="part"><span><b>I 原理</b></span></li>
+<li class="chapter" data-level="1" data-path="section-1.html"><a href="section-1.html"><i class="fa fa-check"></i><b>1</b> 介绍</a></li>
 <li class="chapter" data-level="2" data-path="sec-why-how.html"><a href="sec-why-how.html"><i class="fa fa-check"></i><b>2</b> Why and how</a><ul>
 <li class="chapter" data-level="2.1" data-path="sec-why-how.html"><a href="sec-why-how.html#data-masking"><i class="fa fa-check"></i><b>2.1</b> Data masking</a></li>
 <li class="chapter" data-level="2.2" data-path="sec-why-how.html"><a href="sec-why-how.html#quoting-code"><i class="fa fa-check"></i><b>2.2</b> Quoting code</a></li>
@@ -456,13 +457,13 @@ gdata <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">new =</span> x <span class="op">/</span><span class="st"> </span><span class="kw">sd</span>(x))
 <span class="co">#&gt; # A tibble: 5 x 3</span>
 <span class="co">#&gt; # Groups:   g [3]</span>
-<span class="co">#&gt;          x g          new</span>
-<span class="co">#&gt;      &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 -14.0    a     -1.20   </span>
-<span class="co">#&gt; 2   2.55   a      0.218  </span>
-<span class="co">#&gt; 3 -24.4    b     -1.42   </span>
-<span class="co">#&gt; 4  -0.0557 b     -0.00324</span>
-<span class="co">#&gt; 5   6.22   c     NA</span></code></pre>
+<span class="co">#&gt;          x g           new</span>
+<span class="co">#&gt;      &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 -14.0    a      -1.20   </span>
+<span class="co">#&gt; 2   2.55   a       0.218  </span>
+<span class="co">#&gt; 3 -24.4    b      -1.42   </span>
+<span class="co">#&gt; 4  -0.0557 b      -0.00324</span>
+<span class="co">#&gt; 5   6.22   c      NA</span></code></pre>
 <p>Whereas rowwise vectorisation automates loops over the elements of a column, groupwise vectorisation automates loops over the levels of a grouping specification. The combination of these is very powerful.</p>
 </div>
 </div>
@@ -480,7 +481,7 @@ gdata <span class="op">%&gt;%</span>
 <span class="co">#&gt;         x &lt;- as.character(x)</span>
 <span class="co">#&gt;     .Internal(toupper(x))</span>
 <span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;bytecode: 0x7f8dd20ca538&gt;</span>
+<span class="co">#&gt; &lt;bytecode: 0x485fec0&gt;</span>
 <span class="co">#&gt; &lt;environment: namespace:base&gt;</span></code></pre>
 <p>In its simplest form, functional programming is about passing a function object as argument to another function called a <strong>mapper</strong> function, that iterates over a vector to apply the function on each element, and returns all results in a new vector. In other words, a mapper functions writes loops so you don’t have to. Here is a manual loop that applies <code>toupper()</code> over all elements of a character vector and returns a new vector:</p>
 <pre class="sourceCode r"><code class="sourceCode r">new &lt;-<span class="st"> </span><span class="kw">character</span>(<span class="kw">length</span>(letters))
