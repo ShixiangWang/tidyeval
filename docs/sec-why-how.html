@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html >
-
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
 
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>2 Why and how | Tidy evaluation</title>
-  <meta name="description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数">
-  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2 为什么使用以及怎么使用 | Tidy evaluation</title>
+  <meta name="description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数" />
+  <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="2 Why and how | Tidy evaluation" />
+  <meta property="og:title" content="2 为什么使用以及怎么使用 | Tidy evaluation" />
   <meta property="og:type" content="book" />
   
   
@@ -17,20 +16,20 @@
   <meta name="github-repo" content="ShixiangWang/tidyeval-chinese" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="2 Why and how | Tidy evaluation" />
+  <meta name="twitter:title" content="2 为什么使用以及怎么使用 | Tidy evaluation" />
   
   <meta name="twitter:description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数" />
   
 
-<meta name="author" content="Lionel Henry">
-<meta name="author" content="Hadley Wickham">
-<meta name="author" content="王诗翔（译）">
+<meta name="author" content="Lionel Henry" />
+<meta name="author" content="Hadley Wickham" />
+<meta name="author" content="王诗翔（译）" />
 
 
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
 <link rel="prev" href="section-1.html">
@@ -145,34 +144,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="part"><span><b>I 原理</b></span></li>
 <li class="chapter" data-level="1" data-path="section-1.html"><a href="section-1.html"><i class="fa fa-check"></i><b>1</b> 介绍</a></li>
-<li class="chapter" data-level="2" data-path="sec-why-how.html"><a href="sec-why-how.html"><i class="fa fa-check"></i><b>2</b> Why and how</a><ul>
-<li class="chapter" data-level="2.1" data-path="sec-why-how.html"><a href="sec-why-how.html#data-masking"><i class="fa fa-check"></i><b>2.1</b> Data masking</a></li>
-<li class="chapter" data-level="2.2" data-path="sec-why-how.html"><a href="sec-why-how.html#quoting-code"><i class="fa fa-check"></i><b>2.2</b> Quoting code</a></li>
-<li class="chapter" data-level="2.3" data-path="sec-why-how.html"><a href="sec-why-how.html#unquoting-code"><i class="fa fa-check"></i><b>2.3</b> Unquoting code</a></li>
+<li class="chapter" data-level="2" data-path="sec-why-how.html"><a href="sec-why-how.html"><i class="fa fa-check"></i><b>2</b> 为什么使用以及怎么使用</a><ul>
+<li class="chapter" data-level="2.1" data-path="sec-why-how.html"><a href="sec-why-how.html#section-2.1"><i class="fa fa-check"></i><b>2.1</b> 数据隐藏</a></li>
+<li class="chapter" data-level="2.2" data-path="sec-why-how.html"><a href="sec-why-how.html#section-2.2"><i class="fa fa-check"></i><b>2.2</b> 引用代码</a></li>
+<li class="chapter" data-level="2.3" data-path="sec-why-how.html"><a href="sec-why-how.html#section-2.3"><i class="fa fa-check"></i><b>2.3</b> 去引用代码</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html"><i class="fa fa-check"></i><b>3</b> Do you need tidy eval?</a><ul>
-<li class="chapter" data-level="3.1" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#sec:fixed-colnames"><i class="fa fa-check"></i><b>3.1</b> Fixed column names</a></li>
-<li class="chapter" data-level="3.2" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#sec:automating-loops"><i class="fa fa-check"></i><b>3.2</b> Automating loops</a><ul>
-<li class="chapter" data-level="3.2.1" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#vectorisation-in-dplyr"><i class="fa fa-check"></i><b>3.2.1</b> Vectorisation in dplyr</a></li>
-<li class="chapter" data-level="3.2.2" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#looping-over-columns"><i class="fa fa-check"></i><b>3.2.2</b> Looping over columns</a></li>
+<li class="chapter" data-level="3" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html"><i class="fa fa-check"></i><b>3</b> 你需要 tidy eval 吗？</a><ul>
+<li class="chapter" data-level="3.1" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#sec:fixed-colnames"><i class="fa fa-check"></i><b>3.1</b> 固定列名</a></li>
+<li class="chapter" data-level="3.2" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#sec:automating-loops"><i class="fa fa-check"></i><b>3.2</b> 自动循环</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#dplyr-"><i class="fa fa-check"></i><b>3.2.1</b> dplyr 中的向量化</a></li>
+<li class="chapter" data-level="3.2.2" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#section-3.2.2"><i class="fa fa-check"></i><b>3.2.2</b> 按列循环</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html"><i class="fa fa-check"></i><b>4</b> Getting up to speed</a><ul>
-<li class="chapter" data-level="4.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#writing-functions"><i class="fa fa-check"></i><b>4.1</b> Writing functions</a><ul>
-<li class="chapter" data-level="4.1.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#reducing-duplication"><i class="fa fa-check"></i><b>4.1.1</b> Reducing duplication</a></li>
-<li class="chapter" data-level="4.1.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#whats-special-about-quoting-functions"><i class="fa fa-check"></i><b>4.1.2</b> What’s special about quoting functions?</a></li>
-<li class="chapter" data-level="4.1.3" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#unquotation"><i class="fa fa-check"></i><b>4.1.3</b> Unquotation</a></li>
-<li class="chapter" data-level="4.1.4" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#understanding-with-qq_show"><i class="fa fa-check"></i><b>4.1.4</b> Understanding <code>!!</code> with <code>qq_show()</code></a></li>
+<li class="chapter" data-level="4" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html"><i class="fa fa-check"></i><b>4</b> 加速</a><ul>
+<li class="chapter" data-level="4.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.1"><i class="fa fa-check"></i><b>4.1</b> 编写函数</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.1.1"><i class="fa fa-check"></i><b>4.1.1</b> 减少重复</a></li>
+<li class="chapter" data-level="4.1.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.1.2"><i class="fa fa-check"></i><b>4.1.2</b> 引用函数的特殊之处在哪？</a></li>
+<li class="chapter" data-level="4.1.3" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.1.3"><i class="fa fa-check"></i><b>4.1.3</b> 去引用</a></li>
+<li class="chapter" data-level="4.1.4" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#-qq_show-"><i class="fa fa-check"></i><b>4.1.4</b> 通过 <code>qq_show()</code> 理解 <code>!!</code></a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#quote-and-unquote"><i class="fa fa-check"></i><b>4.2</b> Quote and unquote</a><ul>
-<li class="chapter" data-level="4.2.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#the-abstraction-step"><i class="fa fa-check"></i><b>4.2.1</b> The abstraction step</a></li>
-<li class="chapter" data-level="4.2.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#the-quoting-step"><i class="fa fa-check"></i><b>4.2.2</b> The quoting step</a></li>
-<li class="chapter" data-level="4.2.3" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#the-unquoting-step"><i class="fa fa-check"></i><b>4.2.3</b> The unquoting step</a></li>
-<li class="chapter" data-level="4.2.4" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#result"><i class="fa fa-check"></i><b>4.2.4</b> Result</a></li>
+<li class="chapter" data-level="4.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.2"><i class="fa fa-check"></i><b>4.2</b> 引用和去引用</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.2.1"><i class="fa fa-check"></i><b>4.2.1</b> 第一步：抽取</a></li>
+<li class="chapter" data-level="4.2.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.2.2"><i class="fa fa-check"></i><b>4.2.2</b> 第二步：引用</a></li>
+<li class="chapter" data-level="4.2.3" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.2.3"><i class="fa fa-check"></i><b>4.2.3</b> 第三步：去引用</a></li>
+<li class="chapter" data-level="4.2.4" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.2.4"><i class="fa fa-check"></i><b>4.2.4</b> 结果</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#strings-instead-of-quotes"><i class="fa fa-check"></i><b>4.3</b> Strings instead of quotes</a><ul>
-<li class="chapter" data-level="4.3.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#strings"><i class="fa fa-check"></i><b>4.3.1</b> Strings</a></li>
-<li class="chapter" data-level="4.3.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#character-vectors-of-column-names"><i class="fa fa-check"></i><b>4.3.2</b> Character vectors of column names</a></li>
+<li class="chapter" data-level="4.3" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.3"><i class="fa fa-check"></i><b>4.3</b> 用字符串取代引用</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.3.1"><i class="fa fa-check"></i><b>4.3.1</b> 字符串</a></li>
+<li class="chapter" data-level="4.3.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.3.2"><i class="fa fa-check"></i><b>4.3.2</b> 包含列名的字符串向量</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="multiple.html"><a href="multiple.html"><i class="fa fa-check"></i><b>5</b> Dealing with multiple arguments</a><ul>
@@ -257,7 +256,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="sec:why-how" class="section level1">
-<h1><span class="header-section-number">2</span> Why and how</h1>
+<h1><span class="header-section-number">2</span> 为什么使用以及怎么使用</h1>
 <p>Tidy evaluation is a framework for metaprogramming in R, used throughout the tidyverse to implement data masking. Metaprogramming is about using a programming language to manipulate or modify its own code. This idea is used throughout the tidyverse to change the context of computation of certain pieces of R code.</p>
 <p>Changing the context of evaluation is useful for four main purposes:</p>
 <ul>
@@ -266,8 +265,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><p>To execute your R code with a more performant <strong>compiled language</strong>. For instance, the dplyr package uses C++ implementations for a certain set of mathematical expressions to avoid executing slower R code when possible<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p></li>
 <li><p>To implement <strong>special rules</strong> for ordinary R operators. For instance, selection functions such as <code>dplyr::select()</code> or <code>tidyr::gather()</code> implement specific behaviours for <code>c()</code>, <code>:</code> and <code>-</code>.</p></li>
 </ul>
-<div id="data-masking" class="section level2">
-<h2><span class="header-section-number">2.1</span> Data masking</h2>
+<div id="section-2.1" class="section level2">
+<h2><span class="header-section-number">2.1</span> 数据隐藏</h2>
 <p>Of these goals, the promotion of data frames is the most important because data is often the most relevant context for data analysts. We believe that R and the tidyverse are <a href="https://principles.tidyverse.org/unifying-principles.html#human-centered">human-centered</a> in big part because the data frame is available for direct use in computations, without syntax and boilerplate getting in the way. Formulas for statistical models are a prime example of human-centered syntax in R. Data masking and special operator rules make model formulas an intuitive interface for model specification.</p>
 <p>When the contents of the data frame are temporarily promoted as first class objects, we say the data <strong>masks</strong> the workspace:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>)
@@ -285,8 +284,8 @@ starwars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"
 )
 <span class="co">#&gt; Error in eval(expr, envir, enclos): 找不到对象&#39;height&#39;</span></code></pre>
 </div>
-<div id="quoting-code" class="section level2">
-<h2><span class="header-section-number">2.2</span> Quoting code</h2>
+<div id="section-2.2" class="section level2">
+<h2><span class="header-section-number">2.2</span> 引用代码</h2>
 <p>In order to change the context, evaluation must first be suspended before being resumed in a different environment. The technical term for delaying code in this way is <strong>quoting</strong>. Tidyverse grammars quote the code supplied by users as arguments. They don’t get results of code but the quoted code itself, whose evaluation can be resumed later on in a data context. In a way, quoted code is like a blueprint for R computations. One important quoting function in dplyr is <code>vars()</code>. This function does nothing but return its arguments as blueprints to be interpreted later on by verbs like <code>summarise_at()</code>:</p>
 <pre class="sourceCode r"><code class="sourceCode r">starwars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise_at</span>(<span class="kw">vars</span>(<span class="kw">ends_with</span>(<span class="st">&quot;color&quot;</span>)), n_distinct)
 <span class="co">#&gt; # A tibble: 1 x 3</span>
@@ -325,8 +324,8 @@ rlang<span class="op">::</span><span class="kw">eval_tidy</span>(exprs[[<span cl
 <span class="co">#&gt; [85]   NA   NA 1.65</span></code></pre>
 <p>To sum up, the distinctive look and feel of data masking UIs requires suspending the normal evaluation of R code. Once captured as quoted code, it can be resumed in a different context. Unfortunately, the delaying of code makes it harder to program with data masking functions, and requires learning a bit of new theory and some new tools.</p>
 </div>
-<div id="unquoting-code" class="section level2">
-<h2><span class="header-section-number">2.3</span> Unquoting code</h2>
+<div id="section-2.3" class="section level2">
+<h2><span class="header-section-number">2.3</span> 去引用代码</h2>
 <p>Data masking functions prevent the normal evaluation of their arguments by quoting them. Once in possession of the blueprints of their arguments, a data mask is created and the evaluation is resumed in this new context. Unfortunately, delaying code in this way has a flip side. While it is natural to substitute <em>values</em> when you’re programming with normal functions using regular evaluation, it is harder to substitute <em>column names</em> in data masking functions that delay evaluation of your code. To make indirect references to columns, it is necessary to modify the quoted code <em>before</em> it gets evaluated. This is exactly what the <code>!!</code> operator, pronounced bang bang, is all about. It is a surgery operator for blueprints of R code.</p>
 <p>In the world of normal functions, making indirect references to values is easy. Expressions that yield the same values can be freely interchanged, a property that is sometimes called <a href="https://en.wikipedia.org/wiki/Referential_transparency">referential transparency</a>. The following calls to <code>my_function()</code> all yield the same results because they were given the same value as inputs:</p>
 <pre class="sourceCode r"><code class="sourceCode r">my_function &lt;-<span class="st"> </span><span class="cf">function</span>(x) x <span class="op">*</span><span class="st"> </span><span class="dv">100</span>

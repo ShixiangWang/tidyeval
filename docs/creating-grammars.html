@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html >
-
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
 
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>11 Creating grammars | Tidy evaluation</title>
-  <meta name="description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数">
-  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+  <meta name="description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数" />
+  <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
 
   <meta property="og:title" content="11 Creating grammars | Tidy evaluation" />
   <meta property="og:type" content="book" />
@@ -22,15 +21,15 @@
   <meta name="twitter:description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数" />
   
 
-<meta name="author" content="Lionel Henry">
-<meta name="author" content="Hadley Wickham">
-<meta name="author" content="王诗翔（译）">
+<meta name="author" content="Lionel Henry" />
+<meta name="author" content="Hadley Wickham" />
+<meta name="author" content="王诗翔（译）" />
 
 
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
 <link rel="prev" href="a-rich-toolbox.html">
@@ -145,34 +144,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="part"><span><b>I 原理</b></span></li>
 <li class="chapter" data-level="1" data-path="section-1.html"><a href="section-1.html"><i class="fa fa-check"></i><b>1</b> 介绍</a></li>
-<li class="chapter" data-level="2" data-path="sec-why-how.html"><a href="sec-why-how.html"><i class="fa fa-check"></i><b>2</b> Why and how</a><ul>
-<li class="chapter" data-level="2.1" data-path="sec-why-how.html"><a href="sec-why-how.html#data-masking"><i class="fa fa-check"></i><b>2.1</b> Data masking</a></li>
-<li class="chapter" data-level="2.2" data-path="sec-why-how.html"><a href="sec-why-how.html#quoting-code"><i class="fa fa-check"></i><b>2.2</b> Quoting code</a></li>
-<li class="chapter" data-level="2.3" data-path="sec-why-how.html"><a href="sec-why-how.html#unquoting-code"><i class="fa fa-check"></i><b>2.3</b> Unquoting code</a></li>
+<li class="chapter" data-level="2" data-path="sec-why-how.html"><a href="sec-why-how.html"><i class="fa fa-check"></i><b>2</b> 为什么使用以及怎么使用</a><ul>
+<li class="chapter" data-level="2.1" data-path="sec-why-how.html"><a href="sec-why-how.html#section-2.1"><i class="fa fa-check"></i><b>2.1</b> 数据隐藏</a></li>
+<li class="chapter" data-level="2.2" data-path="sec-why-how.html"><a href="sec-why-how.html#section-2.2"><i class="fa fa-check"></i><b>2.2</b> 引用代码</a></li>
+<li class="chapter" data-level="2.3" data-path="sec-why-how.html"><a href="sec-why-how.html#section-2.3"><i class="fa fa-check"></i><b>2.3</b> 去引用代码</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html"><i class="fa fa-check"></i><b>3</b> Do you need tidy eval?</a><ul>
-<li class="chapter" data-level="3.1" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#sec:fixed-colnames"><i class="fa fa-check"></i><b>3.1</b> Fixed column names</a></li>
-<li class="chapter" data-level="3.2" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#sec:automating-loops"><i class="fa fa-check"></i><b>3.2</b> Automating loops</a><ul>
-<li class="chapter" data-level="3.2.1" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#vectorisation-in-dplyr"><i class="fa fa-check"></i><b>3.2.1</b> Vectorisation in dplyr</a></li>
-<li class="chapter" data-level="3.2.2" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#looping-over-columns"><i class="fa fa-check"></i><b>3.2.2</b> Looping over columns</a></li>
+<li class="chapter" data-level="3" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html"><i class="fa fa-check"></i><b>3</b> 你需要 tidy eval 吗？</a><ul>
+<li class="chapter" data-level="3.1" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#sec:fixed-colnames"><i class="fa fa-check"></i><b>3.1</b> 固定列名</a></li>
+<li class="chapter" data-level="3.2" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#sec:automating-loops"><i class="fa fa-check"></i><b>3.2</b> 自动循环</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#dplyr-"><i class="fa fa-check"></i><b>3.2.1</b> dplyr 中的向量化</a></li>
+<li class="chapter" data-level="3.2.2" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#section-3.2.2"><i class="fa fa-check"></i><b>3.2.2</b> 按列循环</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html"><i class="fa fa-check"></i><b>4</b> Getting up to speed</a><ul>
-<li class="chapter" data-level="4.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#writing-functions"><i class="fa fa-check"></i><b>4.1</b> Writing functions</a><ul>
-<li class="chapter" data-level="4.1.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#reducing-duplication"><i class="fa fa-check"></i><b>4.1.1</b> Reducing duplication</a></li>
-<li class="chapter" data-level="4.1.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#whats-special-about-quoting-functions"><i class="fa fa-check"></i><b>4.1.2</b> What’s special about quoting functions?</a></li>
-<li class="chapter" data-level="4.1.3" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#unquotation"><i class="fa fa-check"></i><b>4.1.3</b> Unquotation</a></li>
-<li class="chapter" data-level="4.1.4" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#understanding-with-qq_show"><i class="fa fa-check"></i><b>4.1.4</b> Understanding <code>!!</code> with <code>qq_show()</code></a></li>
+<li class="chapter" data-level="4" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html"><i class="fa fa-check"></i><b>4</b> 加速</a><ul>
+<li class="chapter" data-level="4.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.1"><i class="fa fa-check"></i><b>4.1</b> 编写函数</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.1.1"><i class="fa fa-check"></i><b>4.1.1</b> 减少重复</a></li>
+<li class="chapter" data-level="4.1.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.1.2"><i class="fa fa-check"></i><b>4.1.2</b> 引用函数的特殊之处在哪？</a></li>
+<li class="chapter" data-level="4.1.3" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.1.3"><i class="fa fa-check"></i><b>4.1.3</b> 去引用</a></li>
+<li class="chapter" data-level="4.1.4" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#-qq_show-"><i class="fa fa-check"></i><b>4.1.4</b> 通过 <code>qq_show()</code> 理解 <code>!!</code></a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#quote-and-unquote"><i class="fa fa-check"></i><b>4.2</b> Quote and unquote</a><ul>
-<li class="chapter" data-level="4.2.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#the-abstraction-step"><i class="fa fa-check"></i><b>4.2.1</b> The abstraction step</a></li>
-<li class="chapter" data-level="4.2.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#the-quoting-step"><i class="fa fa-check"></i><b>4.2.2</b> The quoting step</a></li>
-<li class="chapter" data-level="4.2.3" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#the-unquoting-step"><i class="fa fa-check"></i><b>4.2.3</b> The unquoting step</a></li>
-<li class="chapter" data-level="4.2.4" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#result"><i class="fa fa-check"></i><b>4.2.4</b> Result</a></li>
+<li class="chapter" data-level="4.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.2"><i class="fa fa-check"></i><b>4.2</b> 引用和去引用</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.2.1"><i class="fa fa-check"></i><b>4.2.1</b> 第一步：抽取</a></li>
+<li class="chapter" data-level="4.2.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.2.2"><i class="fa fa-check"></i><b>4.2.2</b> 第二步：引用</a></li>
+<li class="chapter" data-level="4.2.3" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.2.3"><i class="fa fa-check"></i><b>4.2.3</b> 第三步：去引用</a></li>
+<li class="chapter" data-level="4.2.4" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.2.4"><i class="fa fa-check"></i><b>4.2.4</b> 结果</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#strings-instead-of-quotes"><i class="fa fa-check"></i><b>4.3</b> Strings instead of quotes</a><ul>
-<li class="chapter" data-level="4.3.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#strings"><i class="fa fa-check"></i><b>4.3.1</b> Strings</a></li>
-<li class="chapter" data-level="4.3.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#character-vectors-of-column-names"><i class="fa fa-check"></i><b>4.3.2</b> Character vectors of column names</a></li>
+<li class="chapter" data-level="4.3" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.3"><i class="fa fa-check"></i><b>4.3</b> 用字符串取代引用</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.3.1"><i class="fa fa-check"></i><b>4.3.1</b> 字符串</a></li>
+<li class="chapter" data-level="4.3.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.3.2"><i class="fa fa-check"></i><b>4.3.2</b> 包含列名的字符串向量</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="multiple.html"><a href="multiple.html"><i class="fa fa-check"></i><b>5</b> Dealing with multiple arguments</a><ul>

@@ -29,4 +29,4 @@ documentclass: book
 
 * **“[Tidy eval 讲座](https://www.rstudio.com/resources/webinars/tidy-eval/)”**是一个1小时的关于 tidy evaluation 的视频教程。
 
-* **“[Advanced R（第二版）](http://adv-r.hadley.nz/)”**使用了一整个章节介绍使用 tidy eval 进行元编程。
+* **“[Advanced R](http://adv-r.hadley.nz/)”**使用了一整个章节介绍使用 tidy eval 进行元编程。

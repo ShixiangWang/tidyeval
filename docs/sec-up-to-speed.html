@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html >
-
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
 
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>4 Getting up to speed | Tidy evaluation</title>
-  <meta name="description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数">
-  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>4 加速 | Tidy evaluation</title>
+  <meta name="description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数" />
+  <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="4 Getting up to speed | Tidy evaluation" />
+  <meta property="og:title" content="4 加速 | Tidy evaluation" />
   <meta property="og:type" content="book" />
   
   
@@ -17,20 +16,20 @@
   <meta name="github-repo" content="ShixiangWang/tidyeval-chinese" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="4 Getting up to speed | Tidy evaluation" />
+  <meta name="twitter:title" content="4 加速 | Tidy evaluation" />
   
   <meta name="twitter:description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数" />
   
 
-<meta name="author" content="Lionel Henry">
-<meta name="author" content="Hadley Wickham">
-<meta name="author" content="王诗翔（译）">
+<meta name="author" content="Lionel Henry" />
+<meta name="author" content="Hadley Wickham" />
+<meta name="author" content="王诗翔（译）" />
 
 
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
 <link rel="prev" href="sec-do-you-need.html">
@@ -145,34 +144,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="part"><span><b>I 原理</b></span></li>
 <li class="chapter" data-level="1" data-path="section-1.html"><a href="section-1.html"><i class="fa fa-check"></i><b>1</b> 介绍</a></li>
-<li class="chapter" data-level="2" data-path="sec-why-how.html"><a href="sec-why-how.html"><i class="fa fa-check"></i><b>2</b> Why and how</a><ul>
-<li class="chapter" data-level="2.1" data-path="sec-why-how.html"><a href="sec-why-how.html#data-masking"><i class="fa fa-check"></i><b>2.1</b> Data masking</a></li>
-<li class="chapter" data-level="2.2" data-path="sec-why-how.html"><a href="sec-why-how.html#quoting-code"><i class="fa fa-check"></i><b>2.2</b> Quoting code</a></li>
-<li class="chapter" data-level="2.3" data-path="sec-why-how.html"><a href="sec-why-how.html#unquoting-code"><i class="fa fa-check"></i><b>2.3</b> Unquoting code</a></li>
+<li class="chapter" data-level="2" data-path="sec-why-how.html"><a href="sec-why-how.html"><i class="fa fa-check"></i><b>2</b> 为什么使用以及怎么使用</a><ul>
+<li class="chapter" data-level="2.1" data-path="sec-why-how.html"><a href="sec-why-how.html#section-2.1"><i class="fa fa-check"></i><b>2.1</b> 数据隐藏</a></li>
+<li class="chapter" data-level="2.2" data-path="sec-why-how.html"><a href="sec-why-how.html#section-2.2"><i class="fa fa-check"></i><b>2.2</b> 引用代码</a></li>
+<li class="chapter" data-level="2.3" data-path="sec-why-how.html"><a href="sec-why-how.html#section-2.3"><i class="fa fa-check"></i><b>2.3</b> 去引用代码</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html"><i class="fa fa-check"></i><b>3</b> Do you need tidy eval?</a><ul>
-<li class="chapter" data-level="3.1" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#sec:fixed-colnames"><i class="fa fa-check"></i><b>3.1</b> Fixed column names</a></li>
-<li class="chapter" data-level="3.2" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#sec:automating-loops"><i class="fa fa-check"></i><b>3.2</b> Automating loops</a><ul>
-<li class="chapter" data-level="3.2.1" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#vectorisation-in-dplyr"><i class="fa fa-check"></i><b>3.2.1</b> Vectorisation in dplyr</a></li>
-<li class="chapter" data-level="3.2.2" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#looping-over-columns"><i class="fa fa-check"></i><b>3.2.2</b> Looping over columns</a></li>
+<li class="chapter" data-level="3" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html"><i class="fa fa-check"></i><b>3</b> 你需要 tidy eval 吗？</a><ul>
+<li class="chapter" data-level="3.1" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#sec:fixed-colnames"><i class="fa fa-check"></i><b>3.1</b> 固定列名</a></li>
+<li class="chapter" data-level="3.2" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#sec:automating-loops"><i class="fa fa-check"></i><b>3.2</b> 自动循环</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#dplyr-"><i class="fa fa-check"></i><b>3.2.1</b> dplyr 中的向量化</a></li>
+<li class="chapter" data-level="3.2.2" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#section-3.2.2"><i class="fa fa-check"></i><b>3.2.2</b> 按列循环</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html"><i class="fa fa-check"></i><b>4</b> Getting up to speed</a><ul>
-<li class="chapter" data-level="4.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#writing-functions"><i class="fa fa-check"></i><b>4.1</b> Writing functions</a><ul>
-<li class="chapter" data-level="4.1.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#reducing-duplication"><i class="fa fa-check"></i><b>4.1.1</b> Reducing duplication</a></li>
-<li class="chapter" data-level="4.1.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#whats-special-about-quoting-functions"><i class="fa fa-check"></i><b>4.1.2</b> What’s special about quoting functions?</a></li>
-<li class="chapter" data-level="4.1.3" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#unquotation"><i class="fa fa-check"></i><b>4.1.3</b> Unquotation</a></li>
-<li class="chapter" data-level="4.1.4" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#understanding-with-qq_show"><i class="fa fa-check"></i><b>4.1.4</b> Understanding <code>!!</code> with <code>qq_show()</code></a></li>
+<li class="chapter" data-level="4" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html"><i class="fa fa-check"></i><b>4</b> 加速</a><ul>
+<li class="chapter" data-level="4.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.1"><i class="fa fa-check"></i><b>4.1</b> 编写函数</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.1.1"><i class="fa fa-check"></i><b>4.1.1</b> 减少重复</a></li>
+<li class="chapter" data-level="4.1.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.1.2"><i class="fa fa-check"></i><b>4.1.2</b> 引用函数的特殊之处在哪？</a></li>
+<li class="chapter" data-level="4.1.3" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.1.3"><i class="fa fa-check"></i><b>4.1.3</b> 去引用</a></li>
+<li class="chapter" data-level="4.1.4" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#-qq_show-"><i class="fa fa-check"></i><b>4.1.4</b> 通过 <code>qq_show()</code> 理解 <code>!!</code></a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#quote-and-unquote"><i class="fa fa-check"></i><b>4.2</b> Quote and unquote</a><ul>
-<li class="chapter" data-level="4.2.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#the-abstraction-step"><i class="fa fa-check"></i><b>4.2.1</b> The abstraction step</a></li>
-<li class="chapter" data-level="4.2.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#the-quoting-step"><i class="fa fa-check"></i><b>4.2.2</b> The quoting step</a></li>
-<li class="chapter" data-level="4.2.3" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#the-unquoting-step"><i class="fa fa-check"></i><b>4.2.3</b> The unquoting step</a></li>
-<li class="chapter" data-level="4.2.4" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#result"><i class="fa fa-check"></i><b>4.2.4</b> Result</a></li>
+<li class="chapter" data-level="4.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.2"><i class="fa fa-check"></i><b>4.2</b> 引用和去引用</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.2.1"><i class="fa fa-check"></i><b>4.2.1</b> 第一步：抽取</a></li>
+<li class="chapter" data-level="4.2.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.2.2"><i class="fa fa-check"></i><b>4.2.2</b> 第二步：引用</a></li>
+<li class="chapter" data-level="4.2.3" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.2.3"><i class="fa fa-check"></i><b>4.2.3</b> 第三步：去引用</a></li>
+<li class="chapter" data-level="4.2.4" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.2.4"><i class="fa fa-check"></i><b>4.2.4</b> 结果</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#strings-instead-of-quotes"><i class="fa fa-check"></i><b>4.3</b> Strings instead of quotes</a><ul>
-<li class="chapter" data-level="4.3.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#strings"><i class="fa fa-check"></i><b>4.3.1</b> Strings</a></li>
-<li class="chapter" data-level="4.3.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#character-vectors-of-column-names"><i class="fa fa-check"></i><b>4.3.2</b> Character vectors of column names</a></li>
+<li class="chapter" data-level="4.3" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.3"><i class="fa fa-check"></i><b>4.3</b> 用字符串取代引用</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.3.1"><i class="fa fa-check"></i><b>4.3.1</b> 字符串</a></li>
+<li class="chapter" data-level="4.3.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.3.2"><i class="fa fa-check"></i><b>4.3.2</b> 包含列名的字符串向量</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="multiple.html"><a href="multiple.html"><i class="fa fa-check"></i><b>5</b> Dealing with multiple arguments</a><ul>
@@ -257,13 +256,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="sec:up-to-speed" class="section level1">
-<h1><span class="header-section-number">4</span> Getting up to speed</h1>
+<h1><span class="header-section-number">4</span> 加速</h1>
 <p>While tidyverse grammars are easy to write in scripts and at the console, they make it a bit harder to reduce code duplication. Writing functions around dplyr pipelines and other tidyeval APIs requires a bit of special knowledge because these APIs use a special type of functions called <strong>quoting functions</strong> in order to make data first class.</p>
 <p>If one-off code is often reasonable for common data analysis tasks, it is good practice to write reusable functions to reduce code duplication. In this introduction, you will learn about quoting functions, what challenges they pose for programming, and the solutions that <strong>tidy evaluation</strong> provides to solve those problems.</p>
-<div id="writing-functions" class="section level2">
-<h2><span class="header-section-number">4.1</span> Writing functions</h2>
-<div id="reducing-duplication" class="section level3">
-<h3><span class="header-section-number">4.1.1</span> Reducing duplication</h3>
+<div id="section-4.1" class="section level2">
+<h2><span class="header-section-number">4.1</span> 编写函数</h2>
+<div id="section-4.1.1" class="section level3">
+<h3><span class="header-section-number">4.1.1</span> 减少重复</h3>
 <p>Writing functions is essential for the clarity and robustness of your code. Functions have several advantages:</p>
 <ol style="list-style-type: decimal">
 <li><p>They prevent inconsistencies because they force multiple computations to follow a single recipe.</p></li>
@@ -335,8 +334,8 @@ df4 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">grou
 <span class="co">#&gt; 3     8  15.1</span></code></pre>
 <p>To understand how that works, we need to learn about quoting functions and what special steps are needed to be effective at programming with them. Really we only need two new concepts forming together a single pattern: quoting and unquoting. This introduction will get you up to speed with this pattern.</p>
 </div>
-<div id="whats-special-about-quoting-functions" class="section level3">
-<h3><span class="header-section-number">4.1.2</span> What’s special about quoting functions?</h3>
+<div id="section-4.1.2" class="section level3">
+<h3><span class="header-section-number">4.1.2</span> 引用函数的特殊之处在哪？</h3>
 <p>R functions can be categorised in two broad categories: evaluating functions and quoting functions <a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>. These functions differ in the way they get their arguments. Evaluating functions take arguments as <strong>values</strong>. It does not matter what the expression supplied as argument is or which objects it contains. R computes the argument value following the standard rules of evaluation which the function receives passively <a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>.</p>
 <p>The simplest regular function is <code>identity()</code>. It evaluates its single argument and returns the value. Because only the final value of the argument matters, all of these statements are completely equivalent:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">identity</span>(<span class="dv">6</span>)
@@ -368,8 +367,8 @@ b &lt;-<span class="st"> </span><span class="dv">3</span>
 <span class="kw">quote</span>(a <span class="op">*</span><span class="st"> </span>b)
 <span class="co">#&gt; a * b</span></code></pre>
 <p>The first statement returns a quoted string and the other two return quoted code in a formula or as a bare expression.</p>
-<div id="quoting-and-evaluating-in-mundane-r-code" class="section level4">
-<h4><span class="header-section-number">4.1.2.1</span> Quoting and evaluating in mundane R code</h4>
+<div id="-r-" class="section level4">
+<h4><span class="header-section-number">4.1.2.1</span> 在普通 R 代码中引用和计算</h4>
 <p>As an R programmer, you are probably already familiar with the distinction between quoting and evaluating functions. Take the case of subsetting a data frame column by name. The <code>[[</code> and <code>$</code> operators are both standard for this task but they are used in very different situations. The former supports indirect references like variables or expressions that represent a column name while the latter takes a column name directly:</p>
 <pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
   <span class="dt">y =</span> <span class="dv">1</span>,
@@ -417,8 +416,8 @@ df<span class="op">$</span>y      <span class="co"># Direct</span>
 </tbody>
 </table>
 </div>
-<div id="detecting-quoting-functions" class="section level4">
-<h4><span class="header-section-number">4.1.2.2</span> Detecting quoting functions</h4>
+<div id="section-4.1.2.2" class="section level4">
+<h4><span class="header-section-number">4.1.2.2</span> 检测引用函数</h4>
 <p>Because they work so differently to standard R code, it is important to recognise auto-quoted arguments. The documentation of the quoting function should normally tell you if an argument is quoted and evaluated in a special way. You can also detect quoted arguments by yourself with some experimentation. Let’s take the following expressions involving a mix of quoting and evaluating functions:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(MASS)
 <span class="co">#&gt; </span>
@@ -465,11 +464,11 @@ temp &lt;-<span class="st"> &quot;mtcars2&quot;</span>
 </ol>
 </div>
 </div>
-<div id="unquotation" class="section level3">
-<h3><span class="header-section-number">4.1.3</span> Unquotation</h3>
+<div id="section-4.1.3" class="section level3">
+<h3><span class="header-section-number">4.1.3</span> 去引用</h3>
 <p>In practice, functions that evaluate their arguments are easier to program with because they support both direct and indirect references. For quoting functions, a piece of syntax is missing. We need the ability to <strong>unquote</strong> arguments.</p>
-<div id="unquoting-in-base-r" class="section level4">
-<h4><span class="header-section-number">4.1.3.1</span> Unquoting in base R</h4>
+<div id="-r-" class="section level4">
+<h4><span class="header-section-number">4.1.3.1</span> 基础 R 中的去引用</h4>
 <p>Base R provides three different ways of allowing direct references:</p>
 <ul>
 <li><p>An extra function that evaluates its arguments. For instance the evaluating variant of the <code>$</code> operator is <code>[[</code>.</p></li>
@@ -485,8 +484,8 @@ temp &lt;-<span class="st"> &quot;mtcars2&quot;</span>
 </ul>
 <p>There is no general unquoting convention in base R so you have to read the documentation to figure out how to unquote an argument. Many functions like <code>subset()</code> or <code>transform()</code> do not provide any unquoting option at all.</p>
 </div>
-<div id="unquoting-in-the-tidyverse" class="section level4">
-<h4><span class="header-section-number">4.1.3.2</span> Unquoting in the tidyverse!!</h4>
+<div id="tidyverse-" class="section level4">
+<h4><span class="header-section-number">4.1.3.2</span> tidyverse 中的去引用</h4>
 <p>All quoting functions in the tidyverse support a single unquotation mechanism, the <code>!!</code> operator (pronounced <strong>bang-bang</strong>). You can use <code>!!</code> to cancel the automatic quotation and supply indirect references everywhere an argument is automatically quoted. In other words, unquoting lets you open a variable and use what’s inside instead.</p>
 <p>First let’s create a couple of variables that hold references to columns from the <code>mtcars</code> data frame. A simple way of creating these references is to use the fundamental quoting function <code>quote()</code>:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Variables referring to columns `cyl` and `mpg`</span>
@@ -521,8 +520,8 @@ by_cyl &lt;-<span class="st"> </span>mtcars <span class="op">%&gt;%</span>
 <p>Being able to make indirect references by opening variables with <code>!!</code> is rarely useful in scripts but is invaluable for writing functions. With <code>!!</code> we can now easily fix our wrapper function, as we’ll see in the following section.</p>
 </div>
 </div>
-<div id="understanding-with-qq_show" class="section level3">
-<h3><span class="header-section-number">4.1.4</span> Understanding <code>!!</code> with <code>qq_show()</code></h3>
+<div id="-qq_show-" class="section level3">
+<h3><span class="header-section-number">4.1.4</span> 通过 <code>qq_show()</code> 理解 <code>!!</code></h3>
 <p>At this point it is normal if the concept of unquoting still feels nebulous. A good way of practicing this operation is to see for yourself what it is really doing. To that end the <code>qq_show()</code> function from the rlang package performs unquoting and prints the result to the screen. Here is what <code>!!</code> is really doing in the dplyr example (I’ve broken the pipeline into two steps for readability):</p>
 <pre class="sourceCode r"><code class="sourceCode r">rlang<span class="op">::</span><span class="kw">qq_show</span>(mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(<span class="op">!!</span>x_var))
 <span class="co">#&gt; mtcars %&gt;% group_by(cyl)</span>
@@ -538,16 +537,16 @@ rlang<span class="op">::</span><span class="kw">qq_show</span>(<span class="kw">
 <p>As you can see, unquoting a variable that contains a reference to the column <code>cyl</code> is equivalent to directly supplying <code>cyl</code> to the dplyr function.</p>
 </div>
 </div>
-<div id="quote-and-unquote" class="section level2">
-<h2><span class="header-section-number">4.2</span> Quote and unquote</h2>
+<div id="section-4.2" class="section level2">
+<h2><span class="header-section-number">4.2</span> 引用和去引用</h2>
 <p>The basic process for creating tidyeval functions requires thinking a bit differently but is straightforward: quote and unquote.</p>
 <ol style="list-style-type: decimal">
 <li>Use <code>enquo()</code> to make a function automatically quote its argument.</li>
 <li>Use <code>!!</code> to unquote the argument.</li>
 </ol>
 <p>Apart from these additional two steps, the process is the same.</p>
-<div id="the-abstraction-step" class="section level3">
-<h3><span class="header-section-number">4.2.1</span> The abstraction step</h3>
+<div id="section-4.2.1" class="section level3">
+<h3><span class="header-section-number">4.2.1</span> 第一步：抽取</h3>
 <p>We start as usual by identifying the varying parts of a computation and giving them informative names. These names become the arguments to the function.</p>
 <pre class="sourceCode r"><code class="sourceCode r">grouped_mean &lt;-<span class="st"> </span><span class="cf">function</span>(data, group_var, summary_var) {
   data <span class="op">%&gt;%</span>
@@ -556,22 +555,22 @@ rlang<span class="op">::</span><span class="kw">qq_show</span>(<span class="kw">
 }</code></pre>
 <p>As we have seen earlier this function does not quite work yet so let’s fix it by applying the two new steps.</p>
 </div>
-<div id="the-quoting-step" class="section level3">
-<h3><span class="header-section-number">4.2.2</span> The quoting step</h3>
+<div id="section-4.2.2" class="section level3">
+<h3><span class="header-section-number">4.2.2</span> 第二步：引用</h3>
 <p>The quoting step is about making our ordinary function a quoting function. Not all parameters should be automatically quoted though. For instance the <code>data</code> argument refers to a real data frame that is passed around in the ordinary way. It is crucial to identify which parameters of your function should be automatically quoted: the parameters for which it is allowed to refer to columns in the data frames. In the example, <code>group_var</code> and <code>summary_var</code> are the parameters that refer to the data.</p>
 <p>We know that the fundamental quoting function is <code>quote()</code> but how do we go about creating other quoting functions? This is the job of <code>enquo()</code>. While <code>quote()</code> quotes what <em>you</em> typed, <code>enquo()</code> quotes what <em>your user</em> typed. In other words it makes an argument automatically quote its input. This is exactly how dplyr verbs are created! Here is how to apply <code>enquo()</code> to the <code>group_var</code> and <code>summary_var</code> arguments:</p>
 <pre class="sourceCode r"><code class="sourceCode r">group_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(group_var)
 summary_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(summary_var)</code></pre>
 </div>
-<div id="the-unquoting-step" class="section level3">
-<h3><span class="header-section-number">4.2.3</span> The unquoting step</h3>
+<div id="section-4.2.3" class="section level3">
+<h3><span class="header-section-number">4.2.3</span> 第三步：去引用</h3>
 <p>Finally we identify any place where these variables are passed to other quoting functions. That’s where we need to unquote with <code>!!</code>. In this case we pass <code>group_var</code> to <code>group_by()</code> and <code>summary_var</code> to <code>summarise()</code>:</p>
 <pre class="sourceCode r"><code class="sourceCode r">data <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">group_by</span>(<span class="op">!!</span>group_var) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">summarise</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(<span class="op">!!</span>summary_var))</code></pre>
 </div>
-<div id="result" class="section level3">
-<h3><span class="header-section-number">4.2.4</span> Result</h3>
+<div id="section-4.2.4" class="section level3">
+<h3><span class="header-section-number">4.2.4</span> 结果</h3>
 <p>The finished function looks like this:</p>
 <pre class="sourceCode r"><code class="sourceCode r">grouped_mean &lt;-<span class="st"> </span><span class="cf">function</span>(data, group_var, summary_var) {
   group_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(group_var)
@@ -607,8 +606,8 @@ summary_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(summary_
 <p>This simple quote-and-unquote pattern will get you a long way. It makes it possible to abstract complex combinations of quoting functions into a new quoting function. However this gets us in a sort of loop: quoting functions unquote inside other quoting functions and so on. At the start of the loop is the user typing expressions that are automatically quoted. But what if we can’t or don’t want to start with expressions typed by the user? What if we’d like to start with a character vector of column names?</p>
 </div>
 </div>
-<div id="strings-instead-of-quotes" class="section level2">
-<h2><span class="header-section-number">4.3</span> Strings instead of quotes</h2>
+<div id="section-4.3" class="section level2">
+<h2><span class="header-section-number">4.3</span> 用字符串取代引用</h2>
 <p>So far we have created a quoting function that wraps around other quoting functions. How can we break this chain of quoting? How can we go from the evaluating world to the quoting universe? The most common way this transition occurs is when you start with a character vector of column names and somehow need to pass the corresponding columns to quoting functions like <code>dplyr::mutate()</code>, <code>dplyr::select()</code>, or <code>ggplot2::aes()</code>. We need a way of bridging evaluating and quoting functions.</p>
 <p>First let’s see why simply unquoting strings does not work:</p>
 <pre class="sourceCode r"><code class="sourceCode r">var &lt;-<span class="st"> &quot;height&quot;</span>
@@ -618,8 +617,8 @@ summary_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(summary_
 <pre class="sourceCode r"><code class="sourceCode r">rlang<span class="op">::</span><span class="kw">qq_show</span>(<span class="kw">mutate</span>(starwars, <span class="dt">rescaled =</span> <span class="op">!!</span>var <span class="op">*</span><span class="st"> </span><span class="dv">100</span>))
 <span class="co">#&gt; mutate(starwars, rescaled = &quot;height&quot; * 100)</span></code></pre>
 <p>We have unquoted a string, and now dplyr tried to multiply that string by 100!</p>
-<div id="strings" class="section level3">
-<h3><span class="header-section-number">4.3.1</span> Strings</h3>
+<div id="section-4.3.1" class="section level3">
+<h3><span class="header-section-number">4.3.1</span> 字符串</h3>
 <p>There is a fundamental difference between these two objects:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="st">&quot;height&quot;</span>
 <span class="co">#&gt; [1] &quot;height&quot;</span>
@@ -661,8 +660,8 @@ sum_var &lt;-<span class="st"> &quot;mass&quot;</span>
 <span class="co">#&gt; 4 male            NA  </span>
 <span class="co">#&gt; 5 none            NA</span></code></pre>
 </div>
-<div id="character-vectors-of-column-names" class="section level3">
-<h3><span class="header-section-number">4.3.2</span> Character vectors of column names</h3>
+<div id="section-4.3.2" class="section level3">
+<h3><span class="header-section-number">4.3.2</span> 包含列名的字符串向量</h3>
 <p>What if you have a whole character vector of column names? You can transform vectors to a list of symbols with the plural variant <code>syms()</code>:</p>
 <pre class="sourceCode r"><code class="sourceCode r">cols &lt;-<span class="st"> </span><span class="kw">syms</span>(<span class="kw">c</span>(<span class="st">&quot;species&quot;</span>, <span class="st">&quot;gender&quot;</span>))
 

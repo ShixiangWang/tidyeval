@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html >
-
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
 
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>3 Do you need tidy eval? | Tidy evaluation</title>
-  <meta name="description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数">
-  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>3 你需要 tidy eval 吗？ | Tidy evaluation</title>
+  <meta name="description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数" />
+  <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="3 Do you need tidy eval? | Tidy evaluation" />
+  <meta property="og:title" content="3 你需要 tidy eval 吗？ | Tidy evaluation" />
   <meta property="og:type" content="book" />
   
   
@@ -17,20 +16,20 @@
   <meta name="github-repo" content="ShixiangWang/tidyeval-chinese" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="3 Do you need tidy eval? | Tidy evaluation" />
+  <meta name="twitter:title" content="3 你需要 tidy eval 吗？ | Tidy evaluation" />
   
   <meta name="twitter:description" content="这本书的目的是让你跟上 tidy evaluation 的进度，以及如何围绕 tidyverse 流程和语法编写函数" />
   
 
-<meta name="author" content="Lionel Henry">
-<meta name="author" content="Hadley Wickham">
-<meta name="author" content="王诗翔（译）">
+<meta name="author" content="Lionel Henry" />
+<meta name="author" content="Hadley Wickham" />
+<meta name="author" content="王诗翔（译）" />
 
 
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
 <link rel="prev" href="sec-why-how.html">
@@ -145,34 +144,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="part"><span><b>I 原理</b></span></li>
 <li class="chapter" data-level="1" data-path="section-1.html"><a href="section-1.html"><i class="fa fa-check"></i><b>1</b> 介绍</a></li>
-<li class="chapter" data-level="2" data-path="sec-why-how.html"><a href="sec-why-how.html"><i class="fa fa-check"></i><b>2</b> Why and how</a><ul>
-<li class="chapter" data-level="2.1" data-path="sec-why-how.html"><a href="sec-why-how.html#data-masking"><i class="fa fa-check"></i><b>2.1</b> Data masking</a></li>
-<li class="chapter" data-level="2.2" data-path="sec-why-how.html"><a href="sec-why-how.html#quoting-code"><i class="fa fa-check"></i><b>2.2</b> Quoting code</a></li>
-<li class="chapter" data-level="2.3" data-path="sec-why-how.html"><a href="sec-why-how.html#unquoting-code"><i class="fa fa-check"></i><b>2.3</b> Unquoting code</a></li>
+<li class="chapter" data-level="2" data-path="sec-why-how.html"><a href="sec-why-how.html"><i class="fa fa-check"></i><b>2</b> 为什么使用以及怎么使用</a><ul>
+<li class="chapter" data-level="2.1" data-path="sec-why-how.html"><a href="sec-why-how.html#section-2.1"><i class="fa fa-check"></i><b>2.1</b> 数据隐藏</a></li>
+<li class="chapter" data-level="2.2" data-path="sec-why-how.html"><a href="sec-why-how.html#section-2.2"><i class="fa fa-check"></i><b>2.2</b> 引用代码</a></li>
+<li class="chapter" data-level="2.3" data-path="sec-why-how.html"><a href="sec-why-how.html#section-2.3"><i class="fa fa-check"></i><b>2.3</b> 去引用代码</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html"><i class="fa fa-check"></i><b>3</b> Do you need tidy eval?</a><ul>
-<li class="chapter" data-level="3.1" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#sec:fixed-colnames"><i class="fa fa-check"></i><b>3.1</b> Fixed column names</a></li>
-<li class="chapter" data-level="3.2" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#sec:automating-loops"><i class="fa fa-check"></i><b>3.2</b> Automating loops</a><ul>
-<li class="chapter" data-level="3.2.1" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#vectorisation-in-dplyr"><i class="fa fa-check"></i><b>3.2.1</b> Vectorisation in dplyr</a></li>
-<li class="chapter" data-level="3.2.2" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#looping-over-columns"><i class="fa fa-check"></i><b>3.2.2</b> Looping over columns</a></li>
+<li class="chapter" data-level="3" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html"><i class="fa fa-check"></i><b>3</b> 你需要 tidy eval 吗？</a><ul>
+<li class="chapter" data-level="3.1" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#sec:fixed-colnames"><i class="fa fa-check"></i><b>3.1</b> 固定列名</a></li>
+<li class="chapter" data-level="3.2" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#sec:automating-loops"><i class="fa fa-check"></i><b>3.2</b> 自动循环</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#dplyr-"><i class="fa fa-check"></i><b>3.2.1</b> dplyr 中的向量化</a></li>
+<li class="chapter" data-level="3.2.2" data-path="sec-do-you-need.html"><a href="sec-do-you-need.html#section-3.2.2"><i class="fa fa-check"></i><b>3.2.2</b> 按列循环</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html"><i class="fa fa-check"></i><b>4</b> Getting up to speed</a><ul>
-<li class="chapter" data-level="4.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#writing-functions"><i class="fa fa-check"></i><b>4.1</b> Writing functions</a><ul>
-<li class="chapter" data-level="4.1.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#reducing-duplication"><i class="fa fa-check"></i><b>4.1.1</b> Reducing duplication</a></li>
-<li class="chapter" data-level="4.1.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#whats-special-about-quoting-functions"><i class="fa fa-check"></i><b>4.1.2</b> What’s special about quoting functions?</a></li>
-<li class="chapter" data-level="4.1.3" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#unquotation"><i class="fa fa-check"></i><b>4.1.3</b> Unquotation</a></li>
-<li class="chapter" data-level="4.1.4" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#understanding-with-qq_show"><i class="fa fa-check"></i><b>4.1.4</b> Understanding <code>!!</code> with <code>qq_show()</code></a></li>
+<li class="chapter" data-level="4" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html"><i class="fa fa-check"></i><b>4</b> 加速</a><ul>
+<li class="chapter" data-level="4.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.1"><i class="fa fa-check"></i><b>4.1</b> 编写函数</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.1.1"><i class="fa fa-check"></i><b>4.1.1</b> 减少重复</a></li>
+<li class="chapter" data-level="4.1.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.1.2"><i class="fa fa-check"></i><b>4.1.2</b> 引用函数的特殊之处在哪？</a></li>
+<li class="chapter" data-level="4.1.3" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.1.3"><i class="fa fa-check"></i><b>4.1.3</b> 去引用</a></li>
+<li class="chapter" data-level="4.1.4" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#-qq_show-"><i class="fa fa-check"></i><b>4.1.4</b> 通过 <code>qq_show()</code> 理解 <code>!!</code></a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#quote-and-unquote"><i class="fa fa-check"></i><b>4.2</b> Quote and unquote</a><ul>
-<li class="chapter" data-level="4.2.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#the-abstraction-step"><i class="fa fa-check"></i><b>4.2.1</b> The abstraction step</a></li>
-<li class="chapter" data-level="4.2.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#the-quoting-step"><i class="fa fa-check"></i><b>4.2.2</b> The quoting step</a></li>
-<li class="chapter" data-level="4.2.3" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#the-unquoting-step"><i class="fa fa-check"></i><b>4.2.3</b> The unquoting step</a></li>
-<li class="chapter" data-level="4.2.4" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#result"><i class="fa fa-check"></i><b>4.2.4</b> Result</a></li>
+<li class="chapter" data-level="4.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.2"><i class="fa fa-check"></i><b>4.2</b> 引用和去引用</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.2.1"><i class="fa fa-check"></i><b>4.2.1</b> 第一步：抽取</a></li>
+<li class="chapter" data-level="4.2.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.2.2"><i class="fa fa-check"></i><b>4.2.2</b> 第二步：引用</a></li>
+<li class="chapter" data-level="4.2.3" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.2.3"><i class="fa fa-check"></i><b>4.2.3</b> 第三步：去引用</a></li>
+<li class="chapter" data-level="4.2.4" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.2.4"><i class="fa fa-check"></i><b>4.2.4</b> 结果</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#strings-instead-of-quotes"><i class="fa fa-check"></i><b>4.3</b> Strings instead of quotes</a><ul>
-<li class="chapter" data-level="4.3.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#strings"><i class="fa fa-check"></i><b>4.3.1</b> Strings</a></li>
-<li class="chapter" data-level="4.3.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#character-vectors-of-column-names"><i class="fa fa-check"></i><b>4.3.2</b> Character vectors of column names</a></li>
+<li class="chapter" data-level="4.3" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.3"><i class="fa fa-check"></i><b>4.3</b> 用字符串取代引用</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.3.1"><i class="fa fa-check"></i><b>4.3.1</b> 字符串</a></li>
+<li class="chapter" data-level="4.3.2" data-path="sec-up-to-speed.html"><a href="sec-up-to-speed.html#section-4.3.2"><i class="fa fa-check"></i><b>4.3.2</b> 包含列名的字符串向量</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="multiple.html"><a href="multiple.html"><i class="fa fa-check"></i><b>5</b> Dealing with multiple arguments</a><ul>
@@ -257,7 +256,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="sec:do-you-need" class="section level1">
-<h1><span class="header-section-number">3</span> Do you need tidy eval?</h1>
+<h1><span class="header-section-number">3</span> 你需要 tidy eval 吗？</h1>
 <p>In computer science, frameworks like tidy evaluation are known as metaprogramming. Modifying the blueprints of computations amounts to programming the program, i.e. metaprogramming. In other languages, this type of approach is often seen as a last resort because it requires new skills and might make your code harder to read. Things are different in R because of the importance of data masking functions, but it is still good advice to consider other options before turning to tidy evaluation. In this section, we review several strategies for solving programming problems with tidyverse packages.</p>
 <p>Before diving into tidy eval, make sure to know about the fundamentals of programming with the tidyverse. These are likely to have a better return on investment of time and will also be useful to solve problems outside the tidyverse.</p>
 <ul>
@@ -271,7 +270,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul>
 <p>All these techniques make it possible to reuse existing components of tidyverse grammars and compose them into new functions.</p>
 <div id="sec:fixed-colnames" class="section level2">
-<h2><span class="header-section-number">3.1</span> Fixed column names</h2>
+<h2><span class="header-section-number">3.1</span> 固定列名</h2>
 <p>A simple solution is to write functions that expect data frames containing specific column names. If the computation always operates on the same columns and nothing varies, you don’t need any tidy eval. On the other hand, your users must ensure the existence of these columns as part of their data cleaning process. This is why this technique primarily makes sense when you’re writing functions tailored to your own data analysis uses, or perhaps in functions that interface with a specific web API for retrieving data. In general, fixed column names are task specific.</p>
 <p>Say we have a simple pipeline that computes the body mass index for each observation in a tibble:</p>
 <pre class="sourceCode r"><code class="sourceCode r">starwars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">transmute</span>(<span class="dt">bmi =</span> mass <span class="op">/</span><span class="st"> </span>(height <span class="op">/</span><span class="st"> </span><span class="dv">100</span>)<span class="op">^</span><span class="dv">2</span>)
@@ -340,13 +339,13 @@ starwars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"
 <p>Spending your programming time on the domain logic of your function, such as input and scale validation, may have a greater payoff than learning tidy eval just to improve its syntax. It makes your function more robust to faulty data and reduces the risks of erroneous analyses.</p>
 </div>
 <div id="sec:automating-loops" class="section level2">
-<h2><span class="header-section-number">3.2</span> Automating loops</h2>
+<h2><span class="header-section-number">3.2</span> 自动循环</h2>
 <p>Most programming problems involve <strong>iteration</strong> because data transformations are typically achieved element by element, by applying the same recipe over and over again. There are two main ways of automating iteration in R, <strong>vectorisation</strong> and <strong>mapping</strong>. Learning how to juggle with the different ways of expressing loops is not only an important step towards acquiring a good command of R and the tidyverse, it will also make you more proficient at solving programming problems.</p>
-<div id="vectorisation-in-dplyr" class="section level3">
-<h3><span class="header-section-number">3.2.1</span> Vectorisation in dplyr</h3>
+<div id="dplyr-" class="section level3">
+<h3><span class="header-section-number">3.2.1</span> dplyr 中的向量化</h3>
 <p>dplyr is designed to optimise iteration by taking advantage of the vectorisation of many R functions. Rowwise vectorisation is achieved through normal R rules, which dplyr augments with groupwise vectorisation.</p>
-<div id="rowwise-vectorisation" class="section level4">
-<h4><span class="header-section-number">3.2.1.1</span> Rowwise vectorisation</h4>
+<div id="section-3.2.1.1" class="section level4">
+<h4><span class="header-section-number">3.2.1.1</span> 按行计算</h4>
 <p>Rowwise vectorisation in dplyr is a consequence of normal R rules for vectorisation. A vectorised function is a function that works the same way with vectors of 1 element as with vectors of <em>n</em> elements. The operation is applied elementwise (often at the machine code level, which makes them very efficient). We have already mentioned the vectorisation of <code>toupper()</code>, and many other functions in R are vectorised. One important class of vectorised functions is the arithmetic operators:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Dividing 1 element</span>
 <span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="dv">10</span>
@@ -401,8 +400,8 @@ data <span class="op">%&gt;%</span>
 <span class="co">#&gt;     &lt;dbl&gt;</span>
 <span class="co">#&gt; 1    12.8</span></code></pre>
 </div>
-<div id="groupwise-vectorisation" class="section level4">
-<h4><span class="header-section-number">3.2.1.2</span> Groupwise vectorisation</h4>
+<div id="section-3.2.1.2" class="section level4">
+<h4><span class="header-section-number">3.2.1.2</span> 分组计算</h4>
 <p>Things get interesting with grouped tibbles. dplyr augments the vectorisation of normal R functions with groupwise vectorisation. If your tibble has <code>ngroup</code> groups, the operations are repeated <code>ngroup</code> times.</p>
 <pre class="sourceCode r"><code class="sourceCode r">my_division &lt;-<span class="st"> </span><span class="cf">function</span>(x, y) {
   <span class="kw">message</span>(<span class="st">&quot;I was just called&quot;</span>)
@@ -457,22 +456,22 @@ gdata <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">new =</span> x <span class="op">/</span><span class="st"> </span><span class="kw">sd</span>(x))
 <span class="co">#&gt; # A tibble: 5 x 3</span>
 <span class="co">#&gt; # Groups:   g [3]</span>
-<span class="co">#&gt;          x g           new</span>
-<span class="co">#&gt;      &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 -14.0    a      -1.20   </span>
-<span class="co">#&gt; 2   2.55   a       0.218  </span>
-<span class="co">#&gt; 3 -24.4    b      -1.42   </span>
-<span class="co">#&gt; 4  -0.0557 b      -0.00324</span>
-<span class="co">#&gt; 5   6.22   c      NA</span></code></pre>
+<span class="co">#&gt;          x g          new</span>
+<span class="co">#&gt;      &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 -14.0    a     -1.20   </span>
+<span class="co">#&gt; 2   2.55   a      0.218  </span>
+<span class="co">#&gt; 3 -24.4    b     -1.42   </span>
+<span class="co">#&gt; 4  -0.0557 b     -0.00324</span>
+<span class="co">#&gt; 5   6.22   c     NA</span></code></pre>
 <p>Whereas rowwise vectorisation automates loops over the elements of a column, groupwise vectorisation automates loops over the levels of a grouping specification. The combination of these is very powerful.</p>
 </div>
 </div>
-<div id="looping-over-columns" class="section level3">
-<h3><span class="header-section-number">3.2.2</span> Looping over columns</h3>
+<div id="section-3.2.2" class="section level3">
+<h3><span class="header-section-number">3.2.2</span> 按列循环</h3>
 <p>Rowwise and groupwise vectorisations are means of looping in the direction of rows, applying the same operation to each group and each element. What if you’d like to apply an operation in the direction of columns? This is possible in dplyr by <strong>mapping</strong> functions over columns.</p>
 <p>Mapping functions is part of the <a href="https://adv-r.hadley.nz/fp.html">functional programming</a> approach. If you’re going to spend some time learning new programming concepts, acquiring functional programming skills is likely to have a higher payoff than learning about the metaprogramming concepts of tidy evaluation. Functional programming is inherent to R as it underlies the <code>apply()</code> family of functions in base R and the <code>map()</code> family from the <a href="https://purrr.tidyverse.org/">purrr package</a>. It is a powerful tool to add to your quiver.</p>
-<div id="mapping-functions" class="section level4">
-<h4><span class="header-section-number">3.2.2.1</span> Mapping functions</h4>
+<div id="section-3.2.2.1" class="section level4">
+<h4><span class="header-section-number">3.2.2.1</span> 映射函数</h4>
 <p>Everything that exists in R is an object, including functions. If you type the name of a function without parentheses, you get the function object instead of the result of calling the function:</p>
 <pre class="sourceCode r"><code class="sourceCode r">toupper
 <span class="co">#&gt; function (x) </span>
@@ -481,7 +480,7 @@ gdata <span class="op">%&gt;%</span>
 <span class="co">#&gt;         x &lt;- as.character(x)</span>
 <span class="co">#&gt;     .Internal(toupper(x))</span>
 <span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;bytecode: 0x485fec0&gt;</span>
+<span class="co">#&gt; &lt;bytecode: 0x7fa9ffdbec30&gt;</span>
 <span class="co">#&gt; &lt;environment: namespace:base&gt;</span></code></pre>
 <p>In its simplest form, functional programming is about passing a function object as argument to another function called a <strong>mapper</strong> function, that iterates over a vector to apply the function on each element, and returns all results in a new vector. In other words, a mapper functions writes loops so you don’t have to. Here is a manual loop that applies <code>toupper()</code> over all elements of a character vector and returns a new vector:</p>
 <pre class="sourceCode r"><code class="sourceCode r">new &lt;-<span class="st"> </span><span class="kw">character</span>(<span class="kw">length</span>(letters))
@@ -508,8 +507,8 @@ new
 <span class="co">#&gt;  mpg  cyl disp   hp drat   wt qsec   vs   am gear carb </span>
 <span class="co">#&gt;   25    3   27   22   22   29   30    2    2    3    6</span></code></pre>
 </div>
-<div id="scoped-dplyr-variants" class="section level4">
-<h4><span class="header-section-number">3.2.2.2</span> Scoped dplyr variants</h4>
+<div id="dplyr-" class="section level4">
+<h4><span class="header-section-number">3.2.2.2</span> dplyr 作用域变体</h4>
 <p>dplyr provides variants of the main data manipulation verbs that map functions over a selection of columns. These verbs are known as the <a href="https://dplyr.tidyverse.org/reference/scoped.html">scoped variants</a> and are recognizable from their <code>_at</code>, <code>_if</code> and <code>_all</code> suffixes.</p>
 <p>Scoped verbs support three sorts of selection:</p>
 <ol style="list-style-type: decimal">
